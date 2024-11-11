@@ -1,35 +1,58 @@
 <template>
-   <div id="app">
+  <div id="main">
     <nav>
-      <router-link to="/page1">Home</router-link>
-      /////////////
-      <router-link to="/page2">About</router-link>
+      <button v-for="(item, index) in navMenu" :key="`menu-${index}`"
+              @click="goTo(item.url)" class="nav-button" :class="{ activePage: isActiveRoute(item.url) }">
+        <img :src="require(`@/assets/icons/${item.icon}`)" :alt="item.name">
+        <span>{{ item.name }}</span>
+      </button>
     </nav>
-    <router-view />
+    <SubHeader />
+    <router-view/>
   </div>
-  
-<!--   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/> -->
 </template>
 
 <script>
-/* import HelloWorld from './components/HelloWorld.vue' */
+import {useRoute, useRouter} from 'vue-router';
+import SubHeader from "@/components/layout/SubHeader";
 
 export default {
+  setup() {
+    const route = useRoute();
+    const router = useRouter();
+    const navMenu = [
+      {
+        name: '영향도분석',
+        url: "/effect-analysis",
+        icon: "effect.png"
+      },
+      {
+        name: '코드검사',
+        url: "/code-test",
+        icon: "code-test.png"
+      },
+      {
+        name: '코드커버리지',
+        url: "/code-coverage",
+        icon: "coverage.png"
+      }
+    ]
+
+    const isActiveRoute = (path) => route.fullPath === path;
+
+    const goTo = (path) => {
+      router.push(path);
+    };
+
+    return {
+      navMenu,
+      isActiveRoute,
+      goTo,
+    };
+  },
   name: 'App',
- /*  components: {
-    HelloWorld
-  } */
+  components: {
+    SubHeader
+  }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

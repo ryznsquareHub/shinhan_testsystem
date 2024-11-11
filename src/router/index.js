@@ -1,17 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import page2 from '../views/page2.vue'
-import page1 from '../views/page1.vue'
+import EffectAnalysisPage from '@/views/EffectAnalysisPage.vue'
+import CodeTestPage from '@/views/CodeTestPage.vue'
+import CodeCoveragePage from '@/views/CodeCoveragePage.vue'
 
 const routes = [
   {
-    path: '/page1',
-    name: 'page1',
-    component: page1,
+    path: '/effect-analysis',
+    name: 'effect-analysis',
+    component: EffectAnalysisPage,
   },
   {
-    path: '/page2',
-    name: 'page2',
-    component: page2,
+    path: '/code-test',
+    name: 'CodeTestPage',
+    component: CodeTestPage,
+  },
+  {
+    path: '/code-coverage',
+    name: 'CodeCoveragePage',
+    component: CodeCoveragePage,
   },
 ]
 
