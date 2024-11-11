@@ -26,11 +26,12 @@ export default {
     cursor: pointer;
     outline: none;
     border: none;
-    background: #2254A5;
+    background: var(--secondary);
     color: #FFF;
     border-radius: 10px;
     min-height: 31px;
     min-width: 80px;
+    padding: 4px 26px;
     display: flex;
     justify-content: center;
     align-items: center;
