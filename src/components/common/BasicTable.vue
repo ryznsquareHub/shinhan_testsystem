@@ -85,7 +85,6 @@ export default {
     height: 10px;
     cursor: pointer;
     margin-right: -30px;
-
   }
   .vgt-table th.sortable button::before,
   .vgt-table th.sortable button::after {
@@ -108,6 +107,7 @@ export default {
   .vgt-table-custom thead th {
     background: #F7F8FB;
     font-size: 16px;
+    font-weight: 600;
     color: #090909;
     border-top: 1px solid #09090950;
   }

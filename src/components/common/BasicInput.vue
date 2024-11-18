@@ -1,5 +1,5 @@
 <template>
-  <div class="custom-basic" :class="addClass">
+  <div class="custom-basic-input" :class="addClass">
     <label :for="id" class="basic-input-label" :style="label ? '' : 'display: none'">
       {{ label }}
     </label>
@@ -37,11 +37,11 @@ export default {
   .custom-basic-input input {
     width: 100%;
     min-height: 26px;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
     background: none;
     outline: none;
     border: 1px solid #BCBCBC;
-    padding: 5px 9px;
+    padding: 5px 9px !important;
     color: #090909;
     font-size: 14px;
     font-weight: 500;

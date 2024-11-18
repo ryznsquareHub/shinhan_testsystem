@@ -34,6 +34,7 @@ export default {
       type: String,
       default: null,
     },
+    onSelect: Function
   },
   data() {
     return {
@@ -49,6 +50,7 @@ export default {
       this.selected = option;
       this.isOpen = false;
       this.$emit("update:modelValue", option);
+      this.onSelect(option);
     },
   },
 };
@@ -61,13 +63,14 @@ export default {
   min-width: 110px;
   font-weight: 500;
   margin: 4px 0;
+  text-align: start;
 }
 
 .dropdown-button {
   width: 100%;
-  padding: 8px 10px;
+  padding: 4px 10px;
   background-color: #FFFFFF;
-  border: 1px solid #000000;
+  border: 1px solid #BCBCBC;
   text-align: left;
   cursor: pointer;
   font-size: 15px;
@@ -87,7 +90,7 @@ export default {
   left: 0;
   width: 100%;
   background-color: white;
-  border: 1px solid #000000;
+  border: 1px solid #BCBCBC;
   border-top: none;
   z-index: 1000;
   margin-block-start: 0;

@@ -7,7 +7,7 @@
 <!--    </template>-->
   </SubHeader>
   <article class="page-area">
-    <section>
+    <section style="margin-top: 20px">
       <BasicTable :columns="columns" :rows="this.resultData" />
     </section>
   </article>

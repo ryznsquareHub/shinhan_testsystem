@@ -9,13 +9,13 @@
     </template>
   </SubHeader>
   <article class="page-area">
-    <section>
+    <section style="margin-top: 20px">
       <BasicTable :columns="columnsTopTable" :rows="rowsTopTable"/>
     </section>
 
     <hr class="blue-divider">
 
-    <section>
+    <section style="margin-top: 20px">
 <!--      <div class="flex-btn-box" style="margin-bottom: 20px;">-->
 <!--        <BasicButton text="선택 피드백 요청"/>-->
 <!--        <BasicButton text="전체 피드백 요청"/>-->

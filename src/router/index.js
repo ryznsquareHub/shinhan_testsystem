@@ -8,6 +8,7 @@ import FeedbackPage from "@/views/FeedbackPage";
 import ManagementPage from "@/views/ManagementPage";
 import TestAutoPage from "@/views/TestAutoPage";
 import PerformancePage from "@/views/PerformancePage";
+import ModalSamples from "@/views/ModalSamples";
 
 const routes = [
   {
@@ -54,6 +55,11 @@ const routes = [
     path: '/management',
     name: 'ManagementPage',
     component: ManagementPage,
+  },
+  {
+    path: '/modals',
+    name: 'ModalSamples',
+    component: ModalSamples,
   }
 ]
 

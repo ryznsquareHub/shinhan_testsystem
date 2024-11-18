@@ -73,7 +73,7 @@ nav a {
 }
 
 .page-area > section {
-  padding: 48px 77px;
+  padding: 24px 77px 48px;
 }
 
 .blue-divider {
@@ -164,4 +164,76 @@ input[type="checkbox"]:checked::before {
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+.flex-end {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.info-box {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 30px;
+}
+
+.info-box p {
+  font-weight: 400;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.info-box b {
+  font-weight: 600;
+}
+
+hr {
+  margin-block-start: 12px;
+  margin-block-end: 12px;
+}
+
+.text-accent {
+  color: var(--secondary);
+}
+.text-accent-bold {
+  color: var(--secondary);
+  font-weight: bold;
+}
+
+.basic-textarea {
+  min-height: 26px;
+  background: none;
+  outline: none;
+  border: 1px solid #BCBCBC;
+  padding: 6px 17px;
+  color: #090909;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  background: #ECECEC;
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  background-color: #BCBCBC;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #56585D;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: #56585D50;
 }

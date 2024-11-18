@@ -1,123 +1,267 @@
 <template>
   <SubHeader>
     <template #content>
-      <div class="eff-analysis-sub-header">
-        <img :src="require(`@/assets/icons/refresh.svg`)" alt="초기화" width="20px">
+      <div class="search-sub-header">
+        <Dropdown
+          :options="['코드검사', '코드커버리지', '영향도 분석']"
+          v-model="selectedView"
+          :on-select="(option) => selectedView = option"
+        />
+
+        <div class="search-check-boxes">
+          <CheckBox id="파일별" label="파일별"/>
+          <CheckBox id="문서번호별" label="문서번호별"/>
+          <CheckBox id="파일별2" label="파일별"/>
+          <CheckBox id="문서번호별2" label="문서번호별"/>
+          <BasicToggle v-if="selectedView==='영향도 분석'" :defaultActive="true"
+                       :handleChange="(v) => console.log(v)" label="헤더포함"/>
+        </div>
+
+        <div class="doc-num">
+          <BasicInput id="문서번호별"/>
+          <Dropdown
+            v-if="selectedView==='코드커버리지'"
+            :options="['계정계', '정보계']"
+            v-model="selectSystem"
+            :on-select="(option) => selectSystem = option"
+          />
+          <Dropdown
+            v-if="selectedView==='영향도 분석'"
+            :options="['실루엣', 'GIT', '계정계', '정보계']"
+            v-model="selectSystem"
+            :on-select="(option) => selectSystem = option"
+          />
+        </div>
+
+        <div class="resource-input" v-if="selectedView==='코드커버리지'">
+          <span>리소스명</span>
+          <textarea name="resource" id="resource" cols="15" rows="3" class="basic-textarea"></textarea>
+        </div>
+
+        <div class="search-buttons">
+          <BasicButton v-if="selectedView!=='코드커버리지'" text="검색 파라미터 가변"
+                       id="param-search" class="search-btn" width="350px"/>
+          <BasicButton text="검색" class="search-btn"/>
+        </div>
       </div>
+
     </template>
   </SubHeader>
 
   <article class="page-area">
-    <section>
-      <BasicTable :columns="columns" :rows="this.resultData" />
+    <section v-if="selectedView==='코드검사'">
+      <div class="flex-end" style="margin-bottom: 20px">
+        <BasicButton text="코드검사 바로가기"/>
+      </div>
+      <BasicTable :columns="codeTestColumns" :rows="codeTestRows" />
     </section>
+
+    <section v-if="selectedView==='코드커버리지'">
+      <div class="flex-end" style="margin-bottom: 20px">
+        <BasicButton text="커버리지 바로가기"/>
+      </div>
+      <BasicTable :columns="codeCoverageColumns" :rows="codeCoverageRows" />
+    </section>
+
+    <template v-if="selectedView==='영향도 분석'">
+      <section>
+        <div class="flex-end" style="margin-bottom: 20px">
+          <BasicButton text="영향도 바로가기"/>
+        </div>
+        <BasicTable :columns="effectColumnsTop" :rows="effectRowsTop" enable-row-check />
+      </section>
+      <hr class="blue-divider">
+      <section>
+        <BasicTable :columns="effectColumnsBottom" :rows="effectRowsTopBottom" />
+      </section>
+    </template>
   </article>
 </template>
 
 <script>
+
 import SubHeader from "@/components/layout/SubHeader";
+import Dropdown from "@/components/common/Dropdown";
 import BasicTable from "@/components/common/BasicTable";
-import axios from "axios";
+import CheckBox from "@/components/common/CheckBox";
+import BasicInput from "@/components/common/BasicInput";
+import BasicButton from "@/components/common/BasicButton";
+import BasicToggle from "@/components/common/BasicToggle";
+
+import {ref} from "vue";
+
+let selectedView = ref("코드검사");
+let selectSystem = ref("계정계");
 
 export default {
   name: "SearchPage",
   components: {
     BasicTable,
-    SubHeader
+    SubHeader,
+    Dropdown,
+    CheckBox,
+    BasicInput,
+    BasicButton,
+    BasicToggle
+  },
+  setup() {
+    return {
+      selectedView,
+      selectSystem
+    }
   },
   data() {
     return {
-      columns: [
-        { label: '경로', field: 'wrFilePath' },
-        { label: '파일명', field: 'fileName' },
-        { label: '리비전(빌드버전)', field: 'fileVersion' },
+      codeTestColumns: [
+        {label: '경로', field: 'path', sortable: false},
+        {label: '파일명', field: 'file', sortable: false},
+        {label: '리비전(빌드버전)', field: 'revision', sortable: false},
         {
-          label: '완료일시',
-          field: 'expectDt',
+          label: '분석일시',
+          field: 'analyzedAt',
           type: 'date',
           dateInputFormat: 'yyyy-MM-dd HH:mm',
-          dateOutputFormat: 'yyyy/MM/dd HH:mm',
+          dateOutputFormat: 'yyyy/MM/dd HH:mm', sortable: false
         },
-        { label: '총이슈', field: 'issueCount', type: 'number' },
-        { label: '매우위험', field: 'risk1IssueCount', type: 'number' },
-        { label: '위험', field: 'risk2IssueCount', type: 'number' },
-        { label: '보통', field: 'risk3IssueCount', type: 'number' },
-        { label: '낮음', field: 'risk4IssueCount', type: 'number' },
+        {label: '총이슈', field: 'issueCount', type: 'number', sortable: false},
+        {label: '매우위험', field: 'risk1IssueCount', type: 'number', sortable: false},
+        {label: '위험', field: 'risk2IssueCount', type: 'number', sortable: false},
+        {label: '보통', field: 'risk3IssueCount', type: 'number', sortable: false},
+        {label: '낮음', field: 'risk4IssueCount', type: 'number', sortable: false},
         {
-          label: '보고서', field: 'report', sortable: false, type: 'button', btnText: "다운",
-          onClick: (row) => {
+          label: '보고서', field: 'report', sortable: false, type: 'button', btnText: "다운", onClick: (row) => {
             console.log(row)
           }
         }
       ],
-      rows: [
-        { id: 1, path: "/CBB/SERVICE_MODULE/", file: 'kaba119.c', revision: 20, completedAt: "2024-11-11 13:00", total: 1000, extreme: 1000, dangerous: 1000, medium: 1000, low: 1000, report: "" },
-        { id: 2, path: "/CBB/SERVICE_MODULE/", file: 'kaba119.c', revision: 20, completedAt: "2024-11-11 13:00", total: 1000, extreme: 1000, dangerous: 1000, medium: 1000, low: 1000, report: "" },
-        { id: 3, path: "/CBB/SERVICE_MODULE/", file: 'kaba119.c', revision: 20, completedAt: "2024-11-11 13:00", total: 1000, extreme: 1000, dangerous: 1000, medium: 1000, low: 1000, report: "" },
-      ],
-      resultData: [],
-    }
-  },
-  computed: {
-    // 계산된 속성 정의
-    reversedMessage() {
-      return this.message.split('').reverse().join('');
-    },
-  },
-
-  methods: {
-    // 메서드 정의
-    async fetchData() {
-      this.loading = true;
-      this.error = null;
-
-      try {
-        const response = await axios.get('https://api.example.com/items'); // 서버의 URL로 변경
-
-        // HTTP 상태 코드에 따른 분기 처리
-        if (response.status === 200) {
-          // 성공적으로 데이터를 가져온 경우
-          // this.resultData = response.data;
-          this.resultData = {"inspectionResultIdx":20,"vcsType":"SR_SILHOUETTE","gitBranch":null,"moduleGroup":"90978","fileVersion":23,"scanId":9777,"fileName":"ICT예산집행","searchParamName":"SKKTSFT_098f","filePath":"/SKK/SERVICE_MODULE/","wrFilePath":"/SKK/VIEW/","issueCount":5,"risk1IssueCount":1,"risk2IssueCount":0,"risk3IssueCount":2,"risk4IssueCount":0,"risk5IssueCount":2,"hash":"asdasdavsdestrasdas","physicalLoc":500,"buildLoc":20,"commentLoc":45,"expectDt":"2024-11-08T18:19:04.707","inspectDt":"2024-11-07T18:19:04.707","createDt":"2024-11-08T18:19:04.707","archivedFlag":"N","wrCode":"WR00000-DP7"}
-          console.log('Data fetched successfully:', this.items);
-          console.log(this.resultData);
-
-        } else if (response.status === 204) {
-          // 데이터가 없을 경우 (No Content)
-          console.warn('No data available.');
-          this.errorMessage = '데이터가 없습니다.';
+      codeTestRows: [
+        {
+          path: "test", file: "test", revision: "test", analyzedAt: "2024-11-11 13:00", issueCount: "test",
+          risk1IssueCount: "test", risk2IssueCount: "test", risk3IssueCount: "test", risk4IssueCount: "test", report: ""
         }
-
-      } catch (error) {
-        this.resultData = [{"inspectionResultIdx":20,"vcsType":"SR_SILHOUETTE","gitBranch":null,"moduleGroup":"90978","fileVersion":23,"scanId":9777,"fileName":"ICT예산집행","searchParamName":"SKKTSFT_098f","filePath":"/SKK/SERVICE_MODULE/","wrFilePath":"/SKK/VIEW/","issueCount":5,"risk1IssueCount":1,"risk2IssueCount":0,"risk3IssueCount":2,"risk4IssueCount":0,"risk5IssueCount":2,"hash":"asdasdavsdestrasdas","physicalLoc":500,"buildLoc":20,"commentLoc":45,"expectDt":"2024-11-08T18:19:04.707","inspectDt":"2024-11-07T18:19:04.707","createDt":"2024-11-08T18:19:04.707","archivedFlag":"N","wrCode":"WR00000-DP7"}]
-        this.error = '데이터를 불러오는 중 오류가 발생했습니다.';
-        console.error(error);
-      } finally {
-        this.loading = false;
-      }
-    },
-  },
-
-  watch: {
-    // 데이터 변경 감시
-    message(newVal, oldVal) {
-      console.log(`Message changed from ${oldVal} to ${newVal}`);
-    },
-  },
-
-  mounted() {
-    // 컴포넌트가 마운트된 후 호출되는 라이프사이클 훅
-    console.log('Component mounted');
-    this.fetchData();
-  },
-
-  beforeUnmount() {
-    // 기존 beforeDestroy의 로직을 여기로 옮기면 됩니다.
-    console.log('Component will be destroyed');
-  },
+      ],
+      codeCoverageColumns: [
+        {label: '경로', field: 'wrFilePath', sortable: false}, // Matches the 'wrFilePath' field in JSON
+        {label: '파일명', field: 'wrFileName', sortable: false}, // Matches the 'wrFileName' field in JSON
+        {label: '함수', field: 'function', sortable: false}, // Matches the 'function' field in JSON
+        {label: '라인(%)', field: 'line', type: 'number', sortable: false}, // Matches the 'line' field in JSON
+        {label: '변경라인(%)', field: 'modline', type: 'number', sortable: false}, // Matches the 'modline' field in JSON
+        {label: '서버이름', field: 'silGroupId', sortable: false}, // Matches the 'silGroupId' field in JSON
+        {
+          label: '보고서',
+          field: 'link', // Assuming this represents the report link in JSON
+          sortable: false,
+          type: 'button',
+          btnText: "다운",
+          onClick: (row) => {
+            console.log(row);
+          }
+        }
+      ],
+      codeCoverageRows: [
+        {wrFilePath: "test", wrFileName: "test", function: "test", line: 1, modline: 1, silGroupId: "test", link: ""}
+      ],
+      effectColumnsTop: [
+        {label: '경로', field: 'path', sortable: false},
+        {label: '파일명', field: 'file', sortable: false},
+        {
+          label: '분석일시',
+          field: 'analyzedAt',
+          type: 'date',
+          dateInputFormat: 'yyyy-MM-dd HH:mm',
+          dateOutputFormat: 'yyyy/MM/dd HH:mm', sortable: false
+        }
+      ],
+      effectRowsTop: [
+        {path: "test", file: "test", analyzedAt: "2024-11-11 13:00"}
+      ],
+      effectColumnsBottom: [
+        {label: '업무', field: 'prjKorNm', sortable: false}, // JSON의 prjKorNm에 해당
+        {label: '경로', field: 'wrFilePath', sortable: false}, // JSON의 wrFilePath에 해당
+        {label: '참조파일', field: 'tgPgm', sortable: false}, // JSON의 tgPgm에 해당
+        {label: '연관프로그램', field: 'wrFileName', sortable: false}, // JSON의 wrFileName에 해당
+        {label: '설명', field: 'fileDesc', sortable: false}, // JSON의 fileDesc에 해당
+        {label: '담당자', field: 'name', sortable: false}, // JSON의 name에 해당
+        {label: '부서', field: 'dbrnName', sortable: false}, // JSON의 dbrnName에 해당
+        {label: '확인상태', field: 'feedbackStatus', sortable: false}, // JSON의 feedbackStatus에 해당
+        {label: 'DBIO여부', field: 'dbioFlag', sortable: false}, // JSON의 dbioFlag에 해당
+        {
+          label: '발송일',
+          field: 'createDt', // JSON의 createDt에 해당
+          type: 'date',
+          dateInputFormat: 'yyyy-MM-dd HH:mm',
+          dateOutputFormat: 'yyyy/MM/dd HH:mm',
+          sortable: false
+        },
+        {
+          label: '확인일',
+          field: 'checkedAt', // '확인일'에 해당하는 필드가 JSON에 없으므로 추가 필요 시 정의해야 함
+          type: 'date',
+          dateInputFormat: 'yyyy-MM-dd HH:mm',
+          dateOutputFormat: 'yyyy/MM/dd HH:mm',
+          sortable: false
+        }
+      ],
+      effectRowsTopBottom: [
+        {
+          prjKorNm: "test", wrFilePath: "test", tgPgm: "test", wrFileName: "test", fileDesc: "test",
+          name: "test", dbrnName: "test", feedbackStatus: "test",
+          dbioFlag: "test", createDt: "2024-11-11 13:00", checkedAt: "2024-11-11 13:00"
+        }
+      ],
+    }
+  }
 }
 </script>
 
-<style scoped>
+<style>
+  .search-sub-header {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .search-sub-header > .dropdown .dropdown-button span {
+    color: var(--secondary) !important;
+    font-weight: bold;
+  }
+  .search-sub-header .dropdown {
+    width: 130px;
+  }
+
+  .search-check-boxes {
+    align-self: flex-start;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .doc-num {
+    align-self: flex-start;
+    padding-top: 4px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 6px;
+  }
+
+  .doc-num .custom-basic-input {
+    margin-top: 0;
+  }
+
+  .search-buttons {
+    display: flex;
+    gap: 20px;
+    margin-left: auto;
+  }
+
+  .search-sub-header > .search-buttons button {
+    background-color: var(--blue);
+  }
+
+  .resource-input {
+    display: flex;
+    padding-top: 4px;
+    align-self: flex-start;
+    gap: 26px;
+  }
 
 </style>
