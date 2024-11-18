@@ -1,4 +1,11 @@
 <template>
+  <SubHeader>
+<!--    <template #content>-->
+<!--      <div class="eff-analysis-sub-header">-->
+<!--        <img :src="require(`@/assets/icons/refresh.svg`)" alt="초기화" width="20px">-->
+<!--      </div>-->
+<!--    </template>-->
+  </SubHeader>
   <article class="page-area">
     <section>
       <BasicTable :columns="columns" :rows="this.resultData"/>
@@ -8,12 +15,14 @@
 
 <script>
 import BasicTable from "@/components/common/BasicTable";
+import SubHeader from "@/components/layout/SubHeader";
 import axios from 'axios';
 
 export default {
   name: 'CodeCoveragePage',
   components: {
-    BasicTable
+    BasicTable,
+    SubHeader
   },
   data() {
     return {

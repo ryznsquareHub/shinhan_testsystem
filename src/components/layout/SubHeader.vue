@@ -1,6 +1,6 @@
 <template>
   <div class="sub-header">
-
+    <slot name="content"></slot>
   </div>
 </template>
 
@@ -12,8 +12,10 @@ export default {
 
 <style scoped>
   .sub-header {
+    display: flex;
     width: 100%;
-    height: 68px;
+    min-height: 68px;
     border-bottom: 1px solid #2254A5;
+    padding: 17px 50px 20px;
   }
 </style>

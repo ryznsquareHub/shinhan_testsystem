@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  font-weight: 500;
 }
 
 body * {
@@ -7,10 +8,13 @@ body * {
   font-family: Noto Sans KR, Avenir, Helvetica, Arial, sans-serif;
 }
 
-#app {
+:root {
   --blue: #0046FF;
   --secondary: #2254A5;
   --light-grey: #D9D9D9;
+  --bg-light: #E2EDFE;
+  --border-blue: #0D99FF;
+  --text-grey: #696969;
 }
 
 #app {
@@ -77,4 +81,87 @@ nav a {
   height: 0;
   border: 1px solid var(--secondary);
   border-bottom: none;
+}
+
+.bg-light-box {
+  background: #F7F8FB;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+h1, h2, h3 {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.underlined {
+  text-decoration: underline;
+}
+
+.desc-text {
+  font-size: 12px;
+  color: #696969;
+}
+
+a {
+  color: inherit;
+}
+
+input:focus, input:active {
+  outline: none;
+}
+
+.cancel-btn button:not(:hover) {
+  background: #6983C6 !important;
+}
+
+.btn-group-2 {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 9px;
+}
+
+.btn-group-4 {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  column-gap: 9px;
+  row-gap: 16px;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  font-size: 12px;
+  border: 1px solid #000;
+}
+
+input[type="checkbox"]::before {
+  content: "✔";
+  width: 12px;
+  height: 12px;
+  transform: scale(0);
+  background-color: transparent;
+}
+
+input[type="checkbox"]:checked::before {
+  font-weight: 300;
+  transform: scale(1) translateY(-3px) translatex(1px);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.flex-btn-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }

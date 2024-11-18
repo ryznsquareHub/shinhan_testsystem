@@ -1,11 +1,12 @@
 <template>
   <SubHeader>
-<!--    <template #content>-->
-<!--      <div class="eff-analysis-sub-header">-->
-<!--        <img :src="require(`@/assets/icons/refresh.svg`)" alt="초기화" width="20px">-->
-<!--      </div>-->
-<!--    </template>-->
+    <template #content>
+      <div class="eff-analysis-sub-header">
+        <img :src="require(`@/assets/icons/refresh.svg`)" alt="초기화" width="20px">
+      </div>
+    </template>
   </SubHeader>
+
   <article class="page-area">
     <section>
       <BasicTable :columns="columns" :rows="this.resultData" />
@@ -14,12 +15,12 @@
 </template>
 
 <script>
-import BasicTable from "@/components/common/BasicTable";
 import SubHeader from "@/components/layout/SubHeader";
-import axios from 'axios';
+import BasicTable from "@/components/common/BasicTable";
+import axios from "axios";
 
 export default {
-  name: 'CodeTestPage',
+  name: "SearchPage",
   components: {
     BasicTable,
     SubHeader
@@ -97,22 +98,26 @@ export default {
     },
   },
 
-watch: {
-  // 데이터 변경 감시
-  message(newVal, oldVal) {
-    console.log(`Message changed from ${oldVal} to ${newVal}`);
+  watch: {
+    // 데이터 변경 감시
+    message(newVal, oldVal) {
+      console.log(`Message changed from ${oldVal} to ${newVal}`);
+    },
   },
-},
 
-mounted() {
-  // 컴포넌트가 마운트된 후 호출되는 라이프사이클 훅
-  console.log('Component mounted');
-  this.fetchData();
-},
+  mounted() {
+    // 컴포넌트가 마운트된 후 호출되는 라이프사이클 훅
+    console.log('Component mounted');
+    this.fetchData();
+  },
 
-beforeUnmount() {
-  // 기존 beforeDestroy의 로직을 여기로 옮기면 됩니다.
-  console.log('Component will be destroyed');
-},
+  beforeUnmount() {
+    // 기존 beforeDestroy의 로직을 여기로 옮기면 됩니다.
+    console.log('Component will be destroyed');
+  },
 }
 </script>
+
+<style scoped>
+
+</style>

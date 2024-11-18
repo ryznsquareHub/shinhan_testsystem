@@ -1,6 +1,7 @@
 <template>
   <div :class="buttonStyle">
-    <button type="button" @click.stop="handleClick" class="basic-button">
+    <button :id="id" type="button" @click.stop="handleClick"
+            class="basic-button" :style="{width: width ?? 'auto'}">
       <span>{{text}}</span>
     </button>
   </div>
@@ -10,8 +11,13 @@
 export default {
   name: "BasicButton",
   props: {
+    id: {
+      type: String,
+      required: false
+    },
     buttonStyle: String,
-    text: String
+    text: String,
+    width: String,
   },
   methods: {
     handleClick(event) {
