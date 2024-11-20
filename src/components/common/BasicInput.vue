@@ -3,7 +3,7 @@
     <label :for="id" class="basic-input-label" :style="label ? '' : 'display: none'">
       {{ label }}
     </label>
-    <input :id="id" :name="id" :type="type ?? 'text'" :value="value" @change="handleChange">
+    <input :id="id" :name="id" :type="type ?? 'text'" :value="value" @change="handleChange" :placeholder="placeholder">
   </div>
 </template>
 
@@ -15,6 +15,11 @@ export default {
     label: String,
     type: String,
     value: String,
+    placeholder: {
+      type: String,
+      default: '',
+      required: false
+    },
     addClass: {
       type: String,
       required: false

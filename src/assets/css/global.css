@@ -124,6 +124,14 @@ input:focus, input:active {
   gap: 9px;
 }
 
+.btn-group-3 {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 5px;
+}
+
 .btn-group-4 {
   width: 100%;
   display: grid;
@@ -177,7 +185,7 @@ input[type="checkbox"]:checked::before {
 .info-box {
   display: flex;
   flex-direction: column;
-  padding: 10px 30px;
+  padding: 10px 20px;
 }
 
 .info-box p {
@@ -191,6 +199,8 @@ input[type="checkbox"]:checked::before {
 }
 
 hr {
+  background: transparent;
+  border: none;
   margin-block-start: 12px;
   margin-block-end: 12px;
 }
@@ -201,6 +211,26 @@ hr {
 .text-accent-bold {
   color: var(--secondary);
   font-weight: bold;
+}
+
+.text-m-center {
+  margin: 36px auto;
+}
+
+.flex-box {
+  display: flex;
+  align-items: center;
+}
+
+.flex-box-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-light {
+  font-size: 12px;
+  font-weight: 400;
 }
 
 .basic-textarea {

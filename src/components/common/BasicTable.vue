@@ -31,6 +31,13 @@
                alt="delete" width="18px">
         </div>
       </span>
+      <span v-if="props.column.type === 'delete'">
+        <div class="modify-btn">
+          <img :src="require(`@/assets/icons/delete.svg`)"
+               @click="props.column.onClickDelete(props.formattedRow)"
+               alt="delete" width="18px">
+        </div>
+      </span>
       <span v-else>
         {{props.formattedRow[props.column.field]}}
       </span>
