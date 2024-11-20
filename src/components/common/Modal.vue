@@ -1,6 +1,6 @@
 <template>
   <Transition name="modal">
-    <div v-if="show" class="modal-mask">
+    <div v-if="true" class="modal-mask">
       <div class="modal-container">
         <div class="modal-top-deco"/>
         <div class="modal-close">
@@ -8,7 +8,7 @@
         </div>
         
         <div class="modal-header">
-          <slot name="header"> </slot>
+          <slot name="header"></slot>
         </div>
 
         <div class="modal-body">
