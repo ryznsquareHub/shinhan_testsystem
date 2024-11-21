@@ -1,6 +1,6 @@
 <template>
   <Transition name="modal">
-    <div v-if="true" class="modal-mask">
+    <div v-if="show" class="modal-mask">
       <div class="modal-container">
         <div class="modal-top-deco"/>
         <div class="modal-close">

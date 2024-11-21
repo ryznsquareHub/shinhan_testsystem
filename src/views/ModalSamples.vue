@@ -461,7 +461,6 @@
     </div>
 
     <div>
-      <BasicButton @click="showRepoManager = true" text="레포지토리-담당자 등록/수정"/>
       <Teleport to="body">
         <Modal :show="showRepoManager" @close="showRepoManager = false">
           <template #header>
@@ -506,7 +505,7 @@
 
 <script setup>
 import {ref} from 'vue'
-import Modal from "@/components/common/Modal";
+import Modal from "@/components/common/Modal2";
 import BasicButton from "@/components/common/BasicButton";
 import DataTree from "@/components/common/DataTree"
 import BasicTable from "@/components/common/BasicTable"

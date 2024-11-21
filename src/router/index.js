@@ -9,6 +9,7 @@ import ManagementPage from "@/views/ManagementPage";
 import TestAutoPage from "@/views/TestAutoPage";
 import PerformancePage from "@/views/PerformancePage";
 import ModalSamples from "@/views/ModalSamples";
+import ModalSamples2 from '@/views/ModalSamples2.vue';
 
 const routes = [
   {
@@ -60,6 +61,11 @@ const routes = [
     path: '/modals',
     name: 'ModalSamples',
     component: ModalSamples,
+  },
+  {
+    path: '/modals2',
+    name: 'ModalSamples2',
+    component: ModalSamples2,
   }
 ]
 

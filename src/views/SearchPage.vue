@@ -39,7 +39,7 @@
         </div>
 
         <div class="search-buttons">
-          <BasicButton v-if="selectedView!=='코드커버리지'" @click="openModal" text="검색 파라미터 가변~~1"
+          <BasicButton v-if="selectedView!=='코드커버리지'" @click="openModal" text="검색 파라미터 가변"
                        id="param-search" class="search-btn" width="350px"/>
           <BasicButton text="검색" class="search-btn"/>
         </div>
