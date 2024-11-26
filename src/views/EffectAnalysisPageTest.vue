@@ -9,16 +9,16 @@
     </template>
   </SubHeader>
   <article class="page-area">
-  <!--   <section style="margin-top: 20px">
+    <section style="margin-top: 20px">
     <BasicTableInfiniteTest
          :columns="columnsTopTable"
           :rows="rowsBottomTableTest"
         />
-        </section> -->
-    <section style="margin-top: 20px">
+        </section> 
+    <!-- <section style="margin-top: 20px">
       <BasicTable :columns="columnsTopTable" :rows="rowsTopTable"/>
     </section>
-
+ -->
     <hr class="blue-divider">
 
     <section style="margin-top: 20px">
@@ -34,11 +34,11 @@
           perPageDropdown: [3, 7, 9]
         }"
         /> -->
-        <BasicTableInfinite
+     <!--    <BasicTableInfinite
         :columns="columnsBottomTable" 
         :rows="this.rowsBottomTable"
         :getBottomDataInfinite="this.getBottomDataInfinite"
-        />
+        /> -->
     </section>
   </article>
 </template>
