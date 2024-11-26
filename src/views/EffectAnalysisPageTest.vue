@@ -12,7 +12,8 @@
     <section style="margin-top: 20px">
     <BasicTableInfiniteTest
          :columns="columnsTopTable"
-          :rows="rowsBottomTableTest"
+          :rows="rowsTopTable"
+          :getInifiniteDataAdd="getInifiniteDataAdd"
         />
         </section> 
     <!-- <section style="margin-top: 20px">
@@ -67,14 +68,14 @@ export default {
       selectedOption: null,
       columnsTopTable: [
         {
-          label: '경로', field: 'wrFilePath',
+          label: '경로', field: 'id',
           onClick: (row) => {
             console.log(row)
             this.getBottomData(row);
           }
         },
         
-        {label: '파일명', field: 'wrFileName'},
+        {label: '파일명', field: 'title'},
         {
           label: '분석일시',
           field: 'analyzedAt',
@@ -90,6 +91,7 @@ export default {
           }
         },
         {label: 'impactList', field: 'impactList',   hidden: true},
+        {label: 'isMoreRow', field: 'isMoreRow', type: 'isMoreRow',  hidden: false},
       ],
       rowsTopTable: [
         // {id: 1, path2: "/AAA/SERVICE_MODULE/", file: "kiba112.c", analyzedAt: "2024-11-11 13:00", checkedCount: "1/5"},
@@ -259,9 +261,14 @@ export default {
       this.error = null;
 
       // try {
-        axios.get('http://localhost:9000/api/EffectAnalsys')
+        axios.get('https://jsonplaceholder.typicode.com/posts?_start=1&_limit=7')
         .then(response => {
-          this.rowsTopTable = response.data.data;
+          const newRows = response.data;
+          const result_data = _.concat(newRows, { isMoreRow: true });
+          this.rowsTopTable = result_data;
+
+          console.log(this.rowsTopTable);
+          
         })
         .catch(error => {
         console.error(error);
@@ -273,11 +280,16 @@ export default {
 
       this.rowsBottomTable = row.impactList;
     },
-    async getBottomDataInfinite(row) {
+    async getInifiniteDataAdd(row) {
       this.loading = true;
       this.error = null;
+      if(this.rowsTopTable.length < 20){
+        const oldRows = [...this.rowsTopTable]; // 기존 데이터를 복사
+        const filteredRows = _.filter(this.rowsTopTable, (row) => !row.isMoreRow);
 
-      this.rowsBottomTable.push(row.impactList);
+        this.rowsTopTable = _.concat(filteredRows, this.rowsTopTable);
+      }
+      // this.rowsTopTable.push(row.impactList);
     }
   },
 

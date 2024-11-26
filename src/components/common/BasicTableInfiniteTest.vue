@@ -41,15 +41,18 @@
                  alt="delete" width="18px">
           </div>
         </span>
+        <span v-if="props.column.type == 'isMoreRow' && props.formattedRow[props.column.field] == true">
+          <div class="table-container" v-infinite-scroll="onLoadMore"></div>
+          ~~kkk
+        </span>
         <span v-else @click="props.column.onClick && props.column.onClick(props.formattedRow)">
-          {{props.formattedRow[props.column.field]}} ::
+          {{props.formattedRow[props.column.field]}} :: 
         </span>
        
       </template>
-      <div class="table-container" v-infinite-scroll="onLoadMore"></div>
-      ~~kkk
+     
     </VueGoodTable>
-    
+
 </template>
 
 <script setup>
@@ -70,6 +73,7 @@ import { ref } from 'vue'
 import 'vue-good-table-next/dist/vue-good-table-next.css'
 import { VueGoodTable } from 'vue-good-table-next';
 import BasicButton from "@/components/common/BasicButton";
+import _ from 'lodash';
 
 export default {
   name: "BasicTableInfiniteTest",
@@ -80,7 +84,7 @@ export default {
       type: Boolean,
       default: false
     },
-    getBottomDataInfinite: Function,
+    getInifiniteDataAdd: Function,
   },
   components: {
     VueGoodTable,
@@ -96,7 +100,10 @@ export default {
       console.log(selectedRows)
     },
    onLoadMore() {
-    console.log('11112');
+    console.log('11112 :: ');
+    // const newRows = [...this.rows]; // 기존 데이터를 복사
+    // this.rows = _.concat(this.rows, newRows);
+    this.getInifiniteDataAdd(this.row)
     // if (this.getBottomDataInfinite) {
     //   this.getBottomDataInfinite(this.rows);
     // }
