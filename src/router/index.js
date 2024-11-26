@@ -14,22 +14,22 @@ import EffectAnalysisPageTest from '@/views/EffectAnalysisPageTest.vue';
 
 const routes = [
   {
-    path: '/effect-analysis',
+    path: '/web/effect-analysis',
     name: 'effect-analysis',
     component: EffectAnalysisPage,
   },
   {
-    path: '/code-test',
+    path: '/web/code-test',
     name: 'CodeTestPage',
     component: CodeTestPage,
   },
   {
-    path: '/code-coverage',
+    path: '/web/code-coverage',
     name: 'CodeCoveragePage',
     component: CodeCoveragePage,
   },
   {
-    path: '/login',
+    path: '/web/login',
     name: 'LoginPage',
     component: LoginPage,
   },
@@ -39,37 +39,37 @@ const routes = [
     component: SearchPage,
   },
   {
-    path: '/effect-feedback',
+    path: '/web/effect-feedback',
     name: 'FeedbackPage',
     component: FeedbackPage,
   },
   {
-    path: '/performance',
+    path: '/web/performance',
     name: 'PerformancePage',
     component: PerformancePage,
   },
   {
-    path: '/test-automation',
+    path: '/web/test-automation',
     name: 'TestAutoPage',
     component: TestAutoPage,
   },
   {
-    path: '/management',
+    path: '/web/management',
     name: 'ManagementPage',
     component: ManagementPage,
   },
   {
-    path: '/modals',
+    path: '/web/modals',
     name: 'ModalSamples',
     component: ModalSamples,
   },
   {
-    path: '/modals2',
+    path: '/web/modals2',
     name: 'ModalSamples2',
     component: ModalSamples2,
   },
   {
-    path: '/EffectAnalysisPageTest',
+    path: '/web/EffectAnalysisPageTest',
     name: 'EffectAnalysisPageTest',
     component: EffectAnalysisPageTest,
   }

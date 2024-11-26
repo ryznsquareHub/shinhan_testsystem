@@ -76,7 +76,12 @@
         <BasicButton text="선택 피드백"/>
         <BasicButton text="전체 피드백"/>
       </div>
-      <BasicTable :columns="replyColumns" :rows="replyRows" enable-row-check/>
+      <BasicTableInfinite 
+        :columns="replyColumns" 
+        :rows="replyRows" 
+        :getInifiniteDataAdd="getInifiniteDataAdd"
+        enable-row-check
+        />
     </section>
 
   </article>
@@ -188,6 +193,8 @@ import BasicToggle from "@/components/common/BasicToggle";
 import DatePicker from "@/components/common/DatePicker";
 import Modal from "@/components/common/Modal";
 import {ref} from "vue";
+import BasicTableInfinite from "@/components/common/BasicTableInfinite.vue";
+import axios from 'axios';
 
 let selectedView = ref("요청");
 let selectedFile = ref("참조파일");
@@ -203,7 +210,8 @@ export default {
     BasicButton,
     BasicToggle,
     DatePicker,
-    Modal
+    Modal,
+    BasicTableInfinite
   },
   setup() {
     return {
@@ -293,14 +301,44 @@ export default {
         },
       ],
       replyRows: [
-        {
-          NO: "1", sentAt: "2024-11-11 13:00", program: "test", path: "test", file: "test", description: "test",
-          sender: "test", department: "test", state: "test", checkedAt: "2024-11-11 13:00", DBIO: "test", link: "", feedback: ""
-        }
+        // {
+        //   NO: "1", sentAt: "2024-11-11 13:00", program: "test", path: "test", file: "test", description: "test",
+        //   sender: "test", department: "test", state: "test", checkedAt: "2024-11-11 13:00", DBIO: "test", link: "", feedback: ""
+        // }
       ],
     }
   },
   methods: {
+
+    async fetchData() {
+      this.loading = true;
+      this.error = null;
+
+      // try {
+        axios.get('https://jsonplaceholder.typicode.com/posts?_start=1&_limit=7')
+        .then(response => {
+          const newRows = response.data;
+          const result_data = _.concat(newRows, { isMoreRow: true });
+          this.replyRows = result_data;
+
+          console.log(this.replyRows);
+          
+        })
+        .catch(error => {
+        console.error(error);
+    });
+    },
+    async getInifiniteDataAdd(row) {
+      this.loading = true;
+      this.error = null;
+      if(this.rowsTopTable.length < 20){
+        const oldRows = [...this.rowsTopTable]; // 기존 데이터를 복사
+        const filteredRows = _.filter(this.rowsTopTable, (row) => !row.isMoreRow);
+
+        this.rowsTopTable = _.concat(filteredRows, this.rowsTopTable);
+      }
+      // this.rowsTopTable.push(row.impactList);
+    },
     // 영향도피드백
     openModal1() {
       console.log('isModalOpen ::: ')
@@ -327,7 +365,24 @@ export default {
     closeModal3() {
       this.isModalOpen3 = false; // 모달 닫기
     },
-  }
+  },
+  watch: {
+    // 데이터 변경 감시
+    message(newVal, oldVal) {
+      console.log(`Message changed from ${oldVal} to ${newVal}`);
+    },
+  },
+
+  mounted() {
+    // 컴포넌트가 마운트된 후 호출되는 라이프사이클 훅
+    console.log('Component mounted');
+    this.fetchData();
+  },
+
+  beforeUnmount() {
+    // 기존 beforeDestroy의 로직을 여기로 옮기면 됩니다.
+    console.log('Component will be destroyed');
+  },
 }
 </script>
 

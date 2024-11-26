@@ -46,7 +46,7 @@
           ~~kkk
         </span>
         <span v-else @click="props.column.onClick && props.column.onClick(props.formattedRow)">
-          {{props.formattedRow[props.column.field]}} :: 
+          {{props.formattedRow[props.column.field]}}
         </span>
        
       </template>
