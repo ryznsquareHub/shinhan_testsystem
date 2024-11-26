@@ -13,7 +13,9 @@ module.exports = {
         'plugin:vue/vue3-essential', // Vue 3 필수 설정
         'eslint:recommended'
       ],
+      Plugin: ["vue"],
     rules: {
       'vue/multi-word-component-names': 'off',
+      'no-unused-vars': 'off', // 또는 'warn'
     },
   }

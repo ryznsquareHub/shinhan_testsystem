@@ -39,7 +39,7 @@
         </div>
 
         <div class="search-buttons">
-          <BasicButton v-if="selectedView!=='코드커버리지'" text="검색 파라미터 가변"
+          <BasicButton v-if="selectedView!=='코드커버리지'" @click="openModal" text="검색 파라미터 가변~~1"
                        id="param-search" class="search-btn" width="350px"/>
           <BasicButton text="검색" class="search-btn"/>
         </div>
@@ -76,8 +76,48 @@
       </section>
     </template>
   </article>
-</template>
 
+<section class="modal-examples">
+  <Teleport to="body">
+        <Modal v-if="isModalOpen" @close="closeModal">
+          <template #body>
+            <div class="flex-box-center border-box text-light"
+                 style="flex-direction: column; margin-left: auto; width: 180px">
+              <span>/50.제휴대출/01.싱크풀</span>
+              <span>/50.제휴대출/02.유엔솔루션</span>
+            </div>
+            <hr>
+            <div class="search-param-modal">
+              <Dropdown
+                :options="['실루엣', 'GIT', '계정계', '정보계']"
+                :on-select="() => {}"
+                style="margin-right: 18px"
+              />
+              <span class="mr-6"><b>상위프로젝트</b></span>
+              <!--              <span class="mr-6"><b>GIT주소</b></span>-->
+              <BasicInput id="문서번호명"/>
+            </div>
+            <hr>
+            <div class="search-param-modal">
+              <div class="flex-box mr-18">
+                <span class="mr-6"><b>경로</b></span>
+                <BasicInput id="경로" style="width: 150px"/>
+              </div>
+              <div class="flex-box mr-18">
+                <span class="mr-6"><b>파일명</b></span>
+                <BasicInput id="파일명" style="width: 120px"/>
+              </div>
+            </div>
+
+          </template>
+          <template #footer>
+          </template>
+        </Modal>
+      </Teleport>
+
+    </section>
+
+</template>
 <script>
 
 import SubHeader from "@/components/layout/SubHeader";
@@ -87,7 +127,7 @@ import CheckBox from "@/components/common/CheckBox";
 import BasicInput from "@/components/common/BasicInput";
 import BasicButton from "@/components/common/BasicButton";
 import BasicToggle from "@/components/common/BasicToggle";
-
+import Modal from "@/components/common/Modal";
 import {ref} from "vue";
 
 let selectedView = ref("코드검사");
@@ -102,7 +142,8 @@ export default {
     CheckBox,
     BasicInput,
     BasicButton,
-    BasicToggle
+    BasicToggle,
+    Modal
   },
   setup() {
     return {
@@ -112,6 +153,7 @@ export default {
   },
   data() {
     return {
+      isModalOpen: false, // 모달 상태 변수
       codeTestColumns: [
         {label: '경로', field: 'path', sortable: false},
         {label: '파일명', field: 'file', sortable: false},
@@ -210,7 +252,15 @@ export default {
         }
       ],
     }
-  }
+  },
+  methods: {
+    openModal() {
+      this.isModalOpen = true; // 모달 열기
+    },
+    closeModal() {
+      this.isModalOpen = false; // 모달 닫기
+    },
+  },
 }
 </script>
 
@@ -263,5 +313,11 @@ export default {
     align-self: flex-start;
     gap: 26px;
   }
-
+  .modal-examples {
+  width: 60%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+  padding: 40px;
+}
 </style>
