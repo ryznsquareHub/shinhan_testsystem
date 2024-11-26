@@ -38,7 +38,7 @@
                alt="delete" width="18px">
         </div>
       </span>
-      <span v-else>
+      <span v-else @click="props.column.onClick && props.column.onClick(props.formattedRow)">
         {{props.formattedRow[props.column.field]}}
       </span>
     </template>

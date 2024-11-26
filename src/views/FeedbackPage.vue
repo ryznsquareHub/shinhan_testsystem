@@ -64,9 +64,9 @@
 
   <article class="page-area">
     <section v-if="selectedView==='요청'">
-      <div class="flex-btn-box" style="margin-bottom: 20px;">
-        <BasicButton text="선택 피드백 요청"/>
-        <BasicButton text="전체 피드백 요청"/>
+      <div class="flex-btn-box" style="margin-bottom: 20px; ">
+        <BasicButton @click="openModal1" text="선택 피드백 요청" />
+        <BasicButton  @click="openModal1" text="전체 피드백 요청"/>
       </div>
       <BasicTable :columns="requestColumns" :rows="requestRows" enable-row-check/>
     </section>
@@ -80,6 +80,102 @@
     </section>
 
   </article>
+<!-- 모달 -->
+    <section class="modal-examples">
+      <Teleport to="body">
+        <Modal v-if="isModalOpen1" @close="closeModal1">
+          <template #body>
+            <div class="text-center text-m-center text-light" style="width: 240px">
+              <p>영향도 피드백을 하시겠습니까?</p>
+            </div>
+          </template>
+          <template #footer>
+            <div class="btn-group-3">
+              <BasicButton text="취소" button-style="cancel-btn" width="100%"/>
+              <BasicButton text="피드백" width="100%" />
+              <BasicButton text="대결요청" width="100%"  @click="openModal3"/>
+            </div>
+          </template>
+        </Modal>
+      </Teleport>
+    </section>
+
+    <div>
+      <Teleport to="body">
+        <Modal v-if="isModalOpen2" @close="closeModal2">
+          <template #body>
+            <div style="width: 300px" class="text-light">
+              <div class="flex-box-center">
+                <span style="margin-right:12px">참조파일 :</span>
+                <div class="attached-file-list flex-box-center">
+                  <span class="text-light">pgfram609.c</span>
+                  <span class="text-light">pgfram609.c</span>
+                </div>
+              </div>
+              <div class="text-center" style="margin: 24px auto;">
+                <p>에 대해 OK는 영향도 없음,<br/>
+                  개발필요는 영향도 있음으로 담당자에 확인메일을<br/>
+                  처리합니다. 발송 하시겠습니까?</p>
+              </div>
+              <div class="flex-box-center">
+                <span style="margin-right:6px">변경내용</span>
+                <BasicInput style="width: 158px"/>
+              </div>
+            </div>
+          </template>
+          <template #footer>
+            <div class="btn-group-3">
+              <BasicButton text="취소" button-style="cancel-btn" width="100%"/>
+              <BasicButton text="피드백" width="100%" @click="openModal2"/>
+              <BasicButton text="대결요청" width="100%" @click="openModal1"/>
+            </div>
+          </template>
+        </Modal>
+      </Teleport>
+    </div>
+
+    <div>
+      <Teleport to="body">
+        <Modal v-if="isModalOpen3" @close="closeModal3">
+          <template #body>
+            <div class="info-box text-light" style="width: 300px;margin: -12px auto 24px;">
+              <p><b>제목:</b> [영향도분석 취소알림] WR123-DP1</p>
+              <p><b>보낸이:</b> 홍길동</p>
+              <br/>
+              <span>내용 :</span>
+              <br/>
+              <div style="margin-left:20px">
+                <p><b>문서 DP번호:</b> WR1213-DP1</p>
+                <p><b>경로:</b> 2024-03-07 23:42</p>
+                <p><b>참조파일:</b> 2024-03-07 23:42</p>
+                <p><b>연관프로그램:</b> 2024-03-07 23:42</p>
+              </div>
+              <br/>
+              <div class="flex-box text-light">
+                <span style="margin-right:6px">변경내용</span>
+                <div class="flex-box-center border-box text-light">
+                  <span style="width: 120px;">Start0 함수에 회원종류
+                    param 추가해 주시면
+                    영향성 패스.</span>
+                </div>
+              </div>
+              <br/>
+              <p>에 대해 OK는 영향도분석 결과는</p>
+              <p>(OK/개발필요) 입니다.</p>
+            </div>
+          </template>
+          <template #footer>
+            <div/>
+            <!--            <div class="btn-group-2">-->
+            <!--              <BasicButton text="취소" button-style="cancel-btn" width="100%"/>-->
+            <!--              <BasicButton text="대리결제요청" width="100%"/>-->
+            <!--            </div>-->
+          </template>
+        </Modal>
+      </Teleport>
+    </div>
+
+
 </template>
 
 <script>
@@ -90,7 +186,7 @@ import BasicInput from "@/components/common/BasicInput";
 import BasicButton from "@/components/common/BasicButton";
 import BasicToggle from "@/components/common/BasicToggle";
 import DatePicker from "@/components/common/DatePicker";
-
+import Modal from "@/components/common/Modal";
 import {ref} from "vue";
 
 let selectedView = ref("요청");
@@ -106,7 +202,8 @@ export default {
     BasicInput,
     BasicButton,
     BasicToggle,
-    DatePicker
+    DatePicker,
+    Modal
   },
   setup() {
     return {
@@ -117,6 +214,9 @@ export default {
   },
   data() {
     return {
+      isModalOpen1: false, // 모달 상태 변수
+      isModalOpen2: false, // 모달 상태 변수
+      isModalOpen3: false, // 모달 상태 변수
       requestColumns: [
         {label: 'NO', field: 'NO', sortable: false},
         {
@@ -199,6 +299,34 @@ export default {
         }
       ],
     }
+  },
+  methods: {
+    // 영향도피드백
+    openModal1() {
+      console.log('isModalOpen ::: ')
+      this.isModalOpen1 = true; // 모달 열기
+    },
+    closeModal1() {
+      this.isModalOpen1 = false; // 모달 닫기
+    },
+    // 피드백발송
+    openModal2() {
+      this.closeModal1()
+      console.log('isModalOpen2 ::: ')
+      this.isModalOpen2 = true; // 모달 열기
+    },
+    closeModal2() {
+      this.isModalOpen2 = false; // 모달 닫기
+    },
+    // 피드백 요청알림
+    openModal3() {
+      this.closeModal2()
+      console.log('isModalOpen2 ::: ')
+      this.isModalOpen3 = true; // 모달 열기
+    },
+    closeModal3() {
+      this.isModalOpen3 = false; // 모달 닫기
+    },
   }
 }
 </script>
@@ -270,5 +398,11 @@ export default {
   gap: 6px;
   align-items: center;
 }
-
+.modal-examples {
+  width: 60%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+  padding: 40px;
+}
 </style>

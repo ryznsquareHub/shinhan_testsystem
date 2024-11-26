@@ -65,12 +65,81 @@
     <section>
       <div class="flex-btn-box" style="margin-bottom: 20px;">
         <BasicButton text="엑셀 다운로드"/>
-        <BasicButton text="성능검사기록"/>
+        <BasicButton @click="openModal1" text="성능검사기록" />
         <BasicButton text="선택삭제"/>
       </div>
       <BasicTable :columns="columns" :rows="rows" enable-row-check/>
     </section>
   </article>
+<!-- 성능검사 등록/ 수정 -->
+  <div>
+      <Teleport to="body">
+        <Modal v-if="isModalOpen1" @close="closeModal1">
+          <template #header>
+            <div class="modal-h3">
+              <h3>성능검사 등록/수정</h3>
+            </div>
+          </template>
+          <template #body>
+            <div style="width: 600px" class="text-light modal-form">
+              <div style="grid-column: 1 / 3">
+                <BasicInput id="테스트명" label="테스트명"/>
+              </div>
+
+              <div class="modal-form-select">
+                <span><b>채널구분</b></span>
+                <Dropdown
+                  :options="['전체', 'WTS', 'MTS']"
+                  :on-select="() =>{}"
+                />
+              </div>
+              <div class="modal-form-select">
+                <span><b>테스트 결과</b></span>
+                <Dropdown
+                  :options="['전체', '성공', '실패']"
+                  :on-select="() =>{}"
+                />
+              </div>
+
+              <BasicInput id="문서번호" label="문서번호"/>
+              <BasicInput id="등록자" label="등록자"/>
+
+              <div class="modal-form-select" style="grid-column: 1 / 3">
+                <span><b>비고</b></span>
+                <textarea name="note" id="note" rows="5" placeholder="이상없음"
+                          class="basic-textarea" style="font-size: 12px"/>
+              </div>
+
+              <div class="modal-form-select" style="grid-column: 1 / 3">
+                <span><b>파일첨부</b></span>
+                <div class="form-file-list">
+                  <div class="flex-box-center">
+                    <img :src="require(`@/assets/icons/attachment.svg`)" alt="file" width="9px">
+                    <span>성능검사결과1.pdf</span>
+                  </div>
+                  <div class="flex-box-center">
+                    <img :src="require(`@/assets/icons/attachment.svg`)" alt="file" width="9px">
+                    <span>성능검사결과1.pdf</span>
+                  </div>
+                  <div class="flex-box-center">
+                    <img :src="require(`@/assets/icons/attachment.svg`)" alt="file" width="9px">
+                    <span>성능검사결과1.pdf</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </template>
+          <template #footer>
+            <div class="btn-group-2" style="width: 160px;margin: 0 auto;">
+              <BasicButton text="취소" button-style="cancel-btn" width="80px"/>
+              <BasicButton text="저장" width="80px"/>
+            </div>
+          </template>
+        </Modal>
+      </Teleport>
+    </div>
+
 </template>
 
 <script>
@@ -80,7 +149,7 @@ import Dropdown from "@/components/common/Dropdown";
 import BasicInput from "@/components/common/BasicInput";
 import BasicButton from "@/components/common/BasicButton";
 import DatePicker from "@/components/common/DatePicker";
-
+import Modal from "@/components/common/Modal";
 import {ref} from "vue";
 
 let selectedView = ref("요청");
@@ -95,7 +164,8 @@ export default {
     Dropdown,
     BasicInput,
     BasicButton,
-    DatePicker
+    DatePicker,
+    Modal
   },
   setup() {
     return {
@@ -106,6 +176,9 @@ export default {
   },
   data() {
     return {
+      isModalOpen1: false, // 모달 상태 변수
+      isModalOpen2: false, // 모달 상태 변수
+      isModalOpen3: false, // 모달 상태 변수
       columns: [
         {label: 'NO', field: 'NO', sortable: false},
         {
@@ -138,6 +211,34 @@ export default {
         }
       ],
     }
+  },
+  methods: {
+    // 영향도피드백
+    openModal1() {
+      console.log('isModalOpen ::: ')
+      this.isModalOpen1 = true; // 모달 열기
+    },
+    closeModal1() {
+      this.isModalOpen1 = false; // 모달 닫기
+    },
+    // 피드백발송
+    openModal2() {
+      this.closeModal1()
+      console.log('isModalOpen2 ::: ')
+      this.isModalOpen2 = true; // 모달 열기
+    },
+    closeModal2() {
+      this.isModalOpen2 = false; // 모달 닫기
+    },
+    // 피드백 요청알림
+    openModal3() {
+      this.closeModal2()
+      console.log('isModalOpen2 ::: ')
+      this.isModalOpen3 = true; // 모달 열기
+    },
+    closeModal3() {
+      this.isModalOpen3 = false; // 모달 닫기
+    },
   }
 }
 </script>
@@ -172,5 +273,12 @@ export default {
   display: flex;
   gap: 6px;
   align-items: center;
+}
+.modal-examples {
+  width: 60%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+  padding: 40px;
 }
 </style>

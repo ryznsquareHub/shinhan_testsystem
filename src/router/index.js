@@ -9,6 +9,8 @@ import ManagementPage from "@/views/ManagementPage";
 import TestAutoPage from "@/views/TestAutoPage";
 import PerformancePage from "@/views/PerformancePage";
 import ModalSamples from "@/views/ModalSamples";
+import ModalSamples2 from '@/views/ModalSamples2.vue';
+import EffectAnalysisPageTest from '@/views/EffectAnalysisPageTest.vue';
 
 const routes = [
   {
@@ -32,7 +34,7 @@ const routes = [
     component: LoginPage,
   },
   {
-    path: '/search',
+    path: '/web/search',
     name: 'SearchPage',
     component: SearchPage,
   },
@@ -60,6 +62,16 @@ const routes = [
     path: '/modals',
     name: 'ModalSamples',
     component: ModalSamples,
+  },
+  {
+    path: '/modals2',
+    name: 'ModalSamples2',
+    component: ModalSamples2,
+  },
+  {
+    path: '/EffectAnalysisPageTest',
+    name: 'EffectAnalysisPageTest',
+    component: EffectAnalysisPageTest,
   }
 ]
 
