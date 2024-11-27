@@ -133,6 +133,7 @@ export default {
 
   table.vgt-table thead tr:first-of-type th.vgt-checkbox-col {
     background: #F7F8FB !important;
+    width: 32px;
   }
   table.vgt-table th.vgt-checkbox-col {
     background: #FFFFFF;

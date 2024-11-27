@@ -8,6 +8,10 @@ body * {
   font-family: Noto Sans KR, Avenir, Helvetica, Arial, sans-serif;
 }
 
+#main {
+  min-width: 1500px;
+}
+
 :root {
   --blue: #0046FF;
   --secondary: #2254A5;

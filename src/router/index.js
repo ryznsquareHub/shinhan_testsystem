@@ -11,12 +11,25 @@ import PerformancePage from "@/views/PerformancePage";
 import ModalSamples from "@/views/ModalSamples";
 import ModalSamples2 from '@/views/ModalSamples2.vue';
 import EffectAnalysisPageTest from '@/views/EffectAnalysisPageTest.vue';
+import EffectAnalysisPageNoHead from "@/views/EffectAnalysisPageNoHead";
+import CodeTestPageNoHead from "@/views/CodeTestPageNoHead";
+import CodeCoveragePageNoHead from "@/views/CodeCoveragePageNoHead";
 
 const routes = [
+  {
+    path: '/',
+    name: 'effect-feedback',
+    component: FeedbackPage,
+  },
   {
     path: '/web/effect-analysis',
     name: 'effect-analysis',
     component: EffectAnalysisPage,
+  },
+  {
+    path: '/web/effect-analysis-2',
+    name: 'effect-analysis-no-header',
+    component: EffectAnalysisPageNoHead,
   },
   {
     path: '/web/code-test',
@@ -24,9 +37,19 @@ const routes = [
     component: CodeTestPage,
   },
   {
+    path: '/web/code-test-2',
+    name: 'CodeTestPageNoHead',
+    component: CodeTestPageNoHead,
+  },
+  {
     path: '/web/code-coverage',
     name: 'CodeCoveragePage',
     component: CodeCoveragePage,
+  },
+  {
+    path: '/web/code-coverage-2',
+    name: 'CodeCoveragePageNoHead',
+    component: CodeCoveragePageNoHead,
   },
   {
     path: '/web/login',
