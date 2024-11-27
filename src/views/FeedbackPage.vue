@@ -68,7 +68,7 @@
         <BasicButton @click="openModal1" text="선택 피드백 요청" />
         <BasicButton  @click="openModal1" text="전체 피드백 요청"/>
       </div>
-      <BasicTable :columns="requestColumns" :rows="requestRows" enable-row-check/>
+      <BasicTable :columns="requestColumns" :rows="replyRows" enable-row-check/>
     </section>
 
     <section v-if="selectedView==='회신'">
@@ -267,16 +267,16 @@ export default {
         {label: 'NO', field: 'NO', sortable: false},
         {
           label: '발송일',
-          field: 'sentAt',
+          field: 'sentDt',
           type: 'date',
           dateInputFormat: 'yyyy-MM-dd HH:mm',
           dateOutputFormat: 'yyyy/MM/dd HH:mm',
           sortable: false
         },
-        {label: '연관프로그램', field: 'program', sortable: false},
-        {label: '대상경로', field: 'path', sortable: false},
-        {label: '참조파일', field: 'file', sortable: false},
-        {label: '설명', field: 'description',sortable: false},
+        {label: '연관프로그램', field: 'wrFileName', sortable: false},
+        {label: '대상경로', field: 'tgPath', sortable: false},
+        {label: '참조파일', field: 'tgPgm', sortable: false},
+        {label: '설명', field: '',sortable: false},
         {label: '발송인', field: 'sender', sortable: false},
         {label: '부서', field: 'department', sortable: false},
         {label: '확인상태', field: 'state', sortable: false},
@@ -301,10 +301,6 @@ export default {
         },
       ],
       replyRows: [
-        // {
-        //   NO: "1", sentAt: "2024-11-11 13:00", program: "test", path: "test", file: "test", description: "test",
-        //   sender: "test", department: "test", state: "test", checkedAt: "2024-11-11 13:00", DBIO: "test", link: "", feedback: ""
-        // }
       ],
     }
   },
@@ -315,14 +311,13 @@ export default {
       this.error = null;
 
       // try {
-        axios.get('https://jsonplaceholder.typicode.com/posts?_start=1&_limit=7')
+        axios.get('http://localhost:9000/api/effect-feedback')
         .then(response => {
-          const newRows = response.data;
+          const newRows = response.data.data;
           const result_data = _.concat(newRows, { isMoreRow: true });
           this.replyRows = result_data;
 
           console.log(this.replyRows);
-          
         })
         .catch(error => {
         console.error(error);
