@@ -16,7 +16,7 @@
       :columns="columns"
       :rows="rows"
       :fixed-header="true"
-      :max-height="'300px'">
+      :max-height="'350px'">
       <template #table-row="props">
         <span v-if="props.column.type === 'button'">
           <BasicButton
@@ -46,6 +46,8 @@
           ~~kkk
         </span>
         <span v-else @click="props.column.onClick && props.column.onClick(props.formattedRow)">
+          {{props.column.type == 'isMoreRow'}}
+          {{props.formattedRow[props.column.field] == true}} ::
           {{props.formattedRow[props.column.field]}}
         </span>
        

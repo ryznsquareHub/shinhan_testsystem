@@ -16,7 +16,7 @@
     :columns="columns"
     :rows="rows"
     :fixed-header="true"
-    :max-height="'300px'">
+    :max-height="'350px'">
     <template #table-row="props">
       <span v-if="props.column.type === 'button'">
         <BasicButton
@@ -41,14 +41,18 @@
                alt="delete" width="18px">
         </div>
       </span>
-      <span v-if="props.column.type == 'isMoreRow' && props.formattedRow[props.column.field] == true">
-        <div class="table-container" v-infinite-scroll="onLoadMore"></div>
-        ~~kkk
+      <span v-if="props.formattedRow.isMoreRow  && (props.formattedRow.isMoreRow == true || props.formattedRow.isMoreRow == false)">
+        {{props.formattedRow.isMoreRow}} 
+            <div v-if="props.formattedRow.isMoreRow == true" class="table-container" v-infinite-scroll="onLoadMore"></div>
+            <div v-else>kk</div>
       </span>
+      <!-- <span v-if="props.formattedRow.isMoreRow == false">
+            <div class="table-container" v-infinite-scroll="onLoadMore"></div>
+      </span> -->
       <span v-else @click="props.column.onClick && props.column.onClick(props.formattedRow)">
         {{props.formattedRow[props.column.field]}}
       </span>
-     
+   
     </template>
    
   </VueGoodTable>

@@ -67,7 +67,7 @@ export default {
       selectedOption: null,
       columnsTopTable: [
         {
-          label: '경로', field: 'wrFilePath',
+          label: '경로~~1', field: 'wrFilePath',
           onClick: (row) => {
             console.log(row)
             this.getBottomData(row);

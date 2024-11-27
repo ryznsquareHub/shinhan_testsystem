@@ -26,13 +26,9 @@
         <BasicButton text="선택 피드백 요청"/>
         <BasicButton text="전체 피드백 요청"/>
       </div>
-      <BasicTable
+      <BasicTableInfinite
         :columns="columnsBottomTable"
         :rows="this.rowsBottomTable"
-        :pagination-options="{
-          enabled: true,
-          perPageDropdown: [3, 7, 9]
-        }"
         enable-row-check
       />
     </section>
@@ -84,6 +80,7 @@ export default {
         {
           label: '', field: 'button', sortable: false, type: 'button', btnText: "상세보기",
           onClick: (row) => {
+            this.getBottomData();
             console.log(row)
           }
         },
@@ -95,30 +92,33 @@ export default {
         // {id: 3, path2: "/AAA/SERVICE_MODULE/", file: "kiba112.c", analyzedAt: "2024-11-11 13:00", checkedCount: "1/5"},
       ],
       columnsBottomTable: [
-        {label: '업무', field: 'prjKorNm'}, // JSON의 prjKorNm에 해당
-        {label: '경로', field: 'wrFilePath'}, // JSON의 wrFilePath에 해당
-        {label: '참조파일', field: 'tgPgm'}, // JSON의 tgPgm에 해당
-        {label: '연관프로그램', field: 'wrFileName'}, // JSON의 wrFileName에 해당
-        {label: '설명', field: 'fileDesc'}, // JSON의 fileDesc에 해당
-        {label: '담당자', field: 'name'}, // JSON의 name에 해당
-        {label: '부서', field: 'dbrnName'}, // JSON의 dbrnName에 해당
-        {label: '확인상태', field: 'feedbackStatus'}, // JSON의 feedbackStatus에 해당
-        {label: 'DBIO여부', field: 'dbioFlag'}, // JSON의 dbioFlag에 해당
-        {
-          label: '발송일',
-          field: 'createDt', // JSON의 createDt에 해당
-          type: 'date',
-          dateInputFormat: 'yyyy-MM-dd HH:mm',
-          dateOutputFormat: 'yyyy/MM/dd HH:mm',
-        },
-        {
-          label: '확인일',
-          field: 'checkedAt', // '확인일'에 해당하는 필드가 JSON에 없으므로 추가 필요 시 정의해야 함
-          type: 'date',
-          dateInputFormat: 'yyyy-MM-dd HH:mm',
-          dateOutputFormat: 'yyyy/MM/dd HH:mm',
-        }
-      ],
+  { label: "NO", field: 'impactFeedbackIdx', sortable: false },
+  { label: "업무", field: 'prjId', sortable: false },
+  { label: "경로", field: 'wrFilePath', sortable: false },
+  { label: "참조파일", field: 'tgPgm', sortable: false },
+  { label: "연관프로그램", field: 'wrFileName', sortable: false },
+  { label: "설명", field: 'senderOpinion', sortable: false },
+  { label: "담당자", field: 'senderName', sortable: false },
+  { label: "부서", field: 'senderDbrnNm', sortable: false },
+  { label: "확인상태", field: 'feedbackStatus', sortable: false },
+  { label: "DBIO여부", field: 'dbioFlag', sortable: false },
+  {
+    label: "발송일",
+    field: 'dispatchDate',
+    type: "date",
+    dateInputFormat: "yyyy-MM-dd",
+    dateOutputFormat: "yyyy/MM/dd",
+    sortable: false
+  },
+  {
+    label: "확인일",
+    field: 'confirmationDate',
+    type: "date",
+    dateInputFormat: "yyyy-MM-dd",
+    dateOutputFormat: "yyyy/MM/dd",
+    sortable: false
+  }
+],
       rowsBottomTable: [
         // {
         //   id: 1,
@@ -240,7 +240,243 @@ export default {
           path: "/21856/ABF/",
         },
       ],
-      resultData: []
+      resultData: [],
+      tempDataDump1: [
+  {
+    "wrFilePath": "/path/to/file1",
+    "wrFileName": "file1.txt",
+    "analyzedAt": "2024-11-10 12:30",
+    "checkedCount": 12,
+    "impactList": ["Impact A", "Impact B"]
+  },
+  {
+    "wrFilePath": "/path/to/file2",
+    "wrFileName": "file2.txt",
+    "analyzedAt": "2024-11-11 15:45",
+    "checkedCount": 7,
+    "impactList": ["Impact C"]
+  },
+  {
+    "wrFilePath": "/path/to/file3",
+    "wrFileName": "file3.txt",
+    "analyzedAt": "2024-11-12 09:20",
+    "checkedCount": 5,
+    "impactList": ["Impact D", "Impact E"]
+  },
+  {
+    "wrFilePath": "/path/to/file4",
+    "wrFileName": "file4.txt",
+    "analyzedAt": "2024-11-13 17:10",
+    "checkedCount": 3,
+    "impactList": ["Impact F"]
+  },
+  {
+    "wrFilePath": "/path/to/file5",
+    "wrFileName": "file5.txt",
+    "analyzedAt": "2024-11-14 11:00",
+    "checkedCount": 9,
+    "impactList": ["Impact G", "Impact H"]
+  },
+  {
+    "wrFilePath": "/path/to/file6",
+    "wrFileName": "file6.txt",
+    "analyzedAt": "2024-11-15 14:25",
+    "checkedCount": 15,
+    "impactList": ["Impact I", "Impact J", "Impact K"]
+  },
+  {
+    "wrFilePath": "/path/to/file7",
+    "wrFileName": "file7.txt",
+    "analyzedAt": "2024-11-16 16:50",
+    "checkedCount": 8,
+    "impactList": ["Impact L"]
+  },
+  {
+    "wrFilePath": "/path/to/file8",
+    "wrFileName": "file8.txt",
+    "analyzedAt": "2024-11-17 10:05",
+    "checkedCount": 4,
+    "impactList": ["Impact M", "Impact N"]
+  },
+  {
+    "wrFilePath": "/path/to/file9",
+    "wrFileName": "file9.txt",
+    "analyzedAt": "2024-11-18 18:40",
+    "checkedCount": 10,
+    "impactList": ["Impact O", "Impact P", "Impact Q"]
+  },
+  {
+    "wrFilePath": "/path/to/file10",
+    "wrFileName": "file10.txt",
+    "analyzedAt": "2024-11-19 13:15",
+    "checkedCount": 6,
+    "impactList": ["Impact R"]
+  }
+],
+tempDataDump2: [
+  {
+    "impactFeedbackIdx": 12,
+    "wrCode": "WR1234-DP4",
+    "wrFileName": "s1230041",
+    "wrFilePath": "/KCC/SERVIC/",
+    "tgPgm": "11231239.xml",
+    "tgPath": "/target/path/1",
+    "prjId": "PRJ001",
+    "senderEmployee": "401732",
+    "senderName": "홍길동",
+    "senderDbrnCode": "D001",
+    "senderDbrnNm": "금융시스템부",
+    "senderEmail": "hong@example.com",
+    "receiverEmployee": "401731",
+    "receiverName": "김철수",
+    "receiverDbrnCode": "R001",
+    "receiverDbrnNm": "트레이딩시스템부",
+    "receiverEmail": "kim@example.com",
+    "directFlag": "Y",
+    "dbioFlag": "Y",
+    "senderOpinion": "확인 부탁드립니다.",
+    "sentDt": "2024-11-20",
+    "feedbackStatus": "DC",
+    "replyDt": "2024-11-22",
+    "receiverOpinion": "수정 필요",
+    "assignerFlag": "N",
+    "createDt": "2024-11-25 15:21:58",
+    "dispatchDate": "2024-11-19",
+    "targetPath": "/KCC/SERVIC/target_1",
+    "department": "금융시스템부",
+    "confirmationDate": "2024-11-22"
+  },
+  {
+    "impactFeedbackIdx": 13,
+    "wrCode": "WR1234-DP5",
+    "wrFileName": "s1230042",
+    "wrFilePath": "/KCC/SERVIC/",
+    "tgPgm": "11231240.xml",
+    "tgPath": "/target/path/2",
+    "prjId": "PRJ002",
+    "senderEmployee": "401733",
+    "senderName": "이영희",
+    "senderDbrnCode": "D002",
+    "senderDbrnNm": "트레이딩시스템부",
+    "senderEmail": "lee@example.com",
+    "receiverEmployee": "401734",
+    "receiverName": "박민수",
+    "receiverDbrnCode": "R002",
+    "receiverDbrnNm": "금융시스템부",
+    "receiverEmail": "park@example.com",
+    "directFlag": "N",
+    "dbioFlag": "N",
+    "senderOpinion": "다시 확인 부탁드립니다.",
+    "sentDt": "2024-11-21",
+    "feedbackStatus": "IC",
+    "replyDt": "2024-11-24",
+    "receiverOpinion": "확인 완료",
+    "assignerFlag": "Y",
+    "createDt": "2024-11-25 15:30:58",
+    "dispatchDate": "2024-11-20",
+    "targetPath": "/KCC/SERVIC/target_2",
+    "department": "트레이딩시스템부",
+    "confirmationDate": "2024-11-23"
+  },
+  {
+    "impactFeedbackIdx": 14,
+    "wrCode": "WR1234-DP6",
+    "wrFileName": "s1230043",
+    "wrFilePath": "/KCC/SERVIC/",
+    "tgPgm": "11231241.xml",
+    "tgPath": "/target/path/3",
+    "prjId": "PRJ003",
+    "senderEmployee": "401734",
+    "senderName": "최수정",
+    "senderDbrnCode": "D003",
+    "senderDbrnNm": "금융시스템부",
+    "senderEmail": "choi@example.com",
+    "receiverEmployee": "401735",
+    "receiverName": "정우성",
+    "receiverDbrnCode": "R003",
+    "receiverDbrnNm": "트레이딩시스템부",
+    "receiverEmail": "jung@example.com",
+    "directFlag": "Y",
+    "dbioFlag": "N",
+    "senderOpinion": "긴급 확인 부탁드립니다.",
+    "sentDt": "2024-11-19",
+    "feedbackStatus": "AP",
+    "replyDt": "2024-11-20",
+    "receiverOpinion": "완료",
+    "assignerFlag": "N",
+    "createDt": "2024-11-25 15:40:58",
+    "dispatchDate": "2024-11-18",
+    "targetPath": "/KCC/SERVIC/target_3",
+    "department": "금융시스템부",
+    "confirmationDate": "2024-11-20"
+  },
+  {
+    "impactFeedbackIdx": 15,
+    "wrCode": "WR1234-DP7",
+    "wrFileName": "s1230044",
+    "wrFilePath": "/KCC/SERVIC/",
+    "tgPgm": "11231242.xml",
+    "tgPath": "/target/path/4",
+    "prjId": "PRJ004",
+    "senderEmployee": "401735",
+    "senderName": "김유진",
+    "senderDbrnCode": "D004",
+    "senderDbrnNm": "트레이딩시스템부",
+    "senderEmail": "kimyu@example.com",
+    "receiverEmployee": "401736",
+    "receiverName": "장현석",
+    "receiverDbrnCode": "R004",
+    "receiverDbrnNm": "금융시스템부",
+    "receiverEmail": "jang@example.com",
+    "directFlag": "Y",
+    "dbioFlag": "N",
+    "senderOpinion": "내용 검토 부탁드립니다.",
+    "sentDt": "2024-11-18",
+    "feedbackStatus": "DC",
+    "replyDt": "2024-11-19",
+    "receiverOpinion": "확인 중",
+    "assignerFlag": "N",
+    "createDt": "2024-11-25 15:45:58",
+    "dispatchDate": "2024-11-17",
+    "targetPath": "/KCC/SERVIC/target_4",
+    "department": "트레이딩시스템부",
+    "confirmationDate": "2024-11-18"
+  },
+  {
+    "impactFeedbackIdx": 16,
+    "wrCode": "WR1234-DP8",
+    "wrFileName": "s1230045",
+    "wrFilePath": "/KCC/SERVIC/",
+    "tgPgm": "11231243.xml",
+    "tgPath": "/target/path/5",
+    "prjId": "PRJ005",
+    "senderEmployee": "401736",
+    "senderName": "박지훈",
+    "senderDbrnCode": "D005",
+    "senderDbrnNm": "금융시스템부",
+    "senderEmail": "parkji@example.com",
+    "receiverEmployee": "401737",
+    "receiverName": "이하나",
+    "receiverDbrnCode": "R005",
+    "receiverDbrnNm": "트레이딩시스템부",
+    "receiverEmail": "leeha@example.com",
+    "directFlag": "N",
+    "dbioFlag": "Y",
+    "senderOpinion": "최종 검토 부탁드립니다.",
+    "sentDt": "2024-11-16",
+    "feedbackStatus": "AP",
+    "replyDt": "2024-11-18",
+    "receiverOpinion": "확인 완료",
+    "assignerFlag": "Y",
+    "createDt": "2024-11-25 15:50:58",
+    "dispatchDate": "2024-11-15",
+    "targetPath": "/KCC/SERVIC/target_5",
+    "department": "금융시스템부",
+    "confirmationDate": "2024-11-17"
+  }
+]
+
+
     }
   },
   computed: {
@@ -259,7 +495,8 @@ export default {
       // try {
       axios.get('http://localhost:9000/api/EffectAnalsys')
         .then(response => {
-          this.rowsTopTable = response.data.data;
+          this.rowsTopTable = this.tempDataDump1;
+          // this.rowsTopTable = response.data.data;
         })
         .catch(error => {
           console.error(error);
@@ -269,7 +506,8 @@ export default {
       this.loading = true;
       this.error = null;
 
-      this.rowsBottomTable = row.impactList;
+      this.rowsBottomTable = this.tempDataDump2;
+      // this.rowsBottomTable = row.impactList;
     },
     async getBottomDataInfinite(row) {
       this.loading = true;
