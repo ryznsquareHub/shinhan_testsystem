@@ -76,6 +76,7 @@ import 'vue-good-table-next/dist/vue-good-table-next.css'
 import { VueGoodTable } from 'vue-good-table-next';
 import BasicButton from "@/components/common/BasicButton";
 import _ from 'lodash';
+import axios from 'axios';
 
 export default {
   name: "BasicTableInfiniteTest",

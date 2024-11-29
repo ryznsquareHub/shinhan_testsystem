@@ -77,13 +77,6 @@ export default {
           dateOutputFormat: 'yyyy/MM/dd HH:mm',
         },
         {label: '확인건수', field: 'checkedCount'},
-        {
-          label: '', field: 'button', sortable: false, type: 'button', btnText: "상세보기",
-          onClick: (row) => {
-            this.getBottomData();
-            console.log(row)
-          }
-        },
         {label: 'impactList', field: 'impactList', hidden: true},
       ],
       rowsTopTable: [
@@ -92,32 +85,27 @@ export default {
         // {id: 3, path2: "/AAA/SERVICE_MODULE/", file: "kiba112.c", analyzedAt: "2024-11-11 13:00", checkedCount: "1/5"},
       ],
       columnsBottomTable: [
-  { label: "NO", field: 'impactFeedbackIdx', sortable: false },
-  { label: "업무", field: 'prjId', sortable: false },
-  { label: "경로", field: 'wrFilePath', sortable: false },
-  { label: "참조파일", field: 'tgPgm', sortable: false },
-  { label: "연관프로그램", field: 'wrFileName', sortable: false },
-  { label: "설명", field: 'senderOpinion', sortable: false },
-  { label: "담당자", field: 'senderName', sortable: false },
-  { label: "부서", field: 'senderDbrnNm', sortable: false },
-  { label: "확인상태", field: 'feedbackStatus', sortable: false },
-  { label: "DBIO여부", field: 'dbioFlag', sortable: false },
+  // { label: "NO", field: 'impactFeedbackIdx', sortable: false },
+  { label: "업무", field: 'prjId', sortable: true },
+  { label: "경로", field: 'wrFilePath', sortable: true },
+  { label: "참조파일", field: 'tgPgm', sortable: true },
+  { label: "연관프로그램", field: 'wrFileName', sortable: true },
+  { label: "설명", field: 'senderOpinion', sortable: true },
+  { label: "담당자", field: 'senderName', sortable: true },
+  { label: "부서", field: 'senderDbrnNm', sortable: true },
+  { label: "팀명", field: 'senderDbrnNm', sortable: true },
+  { label: "확인상태", field: 'feedbackStatus', sortable: true },
+  { label: "DBIO여부", field: 'dbioFlag', sortable: true },
   {
-    label: "발송일",
-    field: 'dispatchDate',
-    type: "date",
-    dateInputFormat: "yyyy-MM-dd",
-    dateOutputFormat: "yyyy/MM/dd",
-    sortable: false
-  },
-  {
-    label: "확인일",
-    field: 'confirmationDate',
-    type: "date",
-    dateInputFormat: "yyyy-MM-dd",
-    dateOutputFormat: "yyyy/MM/dd",
-    sortable: false
-  }
+          label: '',
+          field: 'kk', // Matches the 'link' field in JSON
+          sortable: false,
+          type: 'button',
+          btnText: "피드백요청",
+          onClick: (row) => {
+            console.log(row);
+          }
+        }
 ],
       rowsBottomTable: [
         // {

@@ -29,7 +29,8 @@
   <SubHeader>
     <template #content>
       <div class="common-sub-header">
-        <span>피드백상태 : (4/5건)</span>
+        <span v-if="selectedView === '요청'">피드백 상태 <br>(4/5건)</span>
+        <span v-if="selectedView === '회신'">피드백 회신상태 <br>(4/5건)</span>
         <span class="text-accent-bold" style="margin-left: 60px;">파일명</span>
         <Dropdown :options="['참조파일', '대상파일']" v-model="selectedFile" :on-select="(option) => selectedFile = option" />
         <BasicInput id="file-name" name="file-name" />
@@ -43,7 +44,7 @@
           <DatePicker :on-select="(d) => console.log(d)" />
         </div>
 
-        <BasicToggle :defaultActive="true" :handleChange="(v) => console.log(v)" label="중적 완료 포함" />
+        <BasicToggle :defaultActive="true" :handleChange="(v) => console.log(v)" label="증적 완료 포함" />
 
         <span class="text-accent-bold" style="margin-left: 25px;">
           {{ selectedView === '요청' ? '담당자' : '발송인' }}
@@ -51,6 +52,9 @@
         <BasicInput id="manager" name="manager" />
         <span class="text-accent-bold">부서</span>
         <BasicInput id="department" name="department" />
+
+        <span class="text-accent-bold">팀명</span>
+        <BasicInput id="" name="" />
 
         <div class="search-buttons">
           <BasicButton text="검색" class="search-btn" />
@@ -64,33 +68,26 @@
     <section v-if="selectedView === '요청'">
       <div class="flex-btn-box" style="margin-bottom: 20px; ">
         <BasicButton @click="openModal1" text="선택 피드백 요청" />
-        <BasicButton @click="openModal1" text="전체 피드백 요청~~5" />
+        <BasicButton @click="openModal1" text="전체 피드백 요청" />
       </div>
-      <BasicTableInfinite 
-      :columns="requestColumns" 
-      :rows="replyRows" 
-      :getInifiniteDataAdd="getInifiniteDataAdd"
-      enable-row-check />
+      <BasicTableInfinite :columns="requestColumns" :rows="replyRows" :getInifiniteDataAdd="getInifiniteDataAdd"
+        enable-row-check />
     </section>
 
-    <!--    <section v-if="selectedView==='회신'">
+    <section v-if="selectedView === '회신'">
       <div class="flex-btn-box" style="margin-bottom: 20px;">
-        <BasicButton text="선택 피드백"/>
-        <BasicButton text="전체 피드백"/>
+        <BasicButton @click="openModal21" text="선택 피드백" />
+        <BasicButton @click="openModal21" text="전체 피드백" />
       </div>
-      <BasicTableInfinite 
-        :columns="replyColumns" 
-        :rows="replyRows" 
-        :getInifiniteDataAdd="getInifiniteDataAdd"
-        enable-row-check
-        />
+      <BasicTableInfinite :columns="replyColumns" :rows="replyRows" :getInifiniteDataAdd="getInifiniteDataAdd"
+        enable-row-check />
     </section>
- -->
+
   </article>
   <!-- 모달 -->
   <section class="modal-examples">
     <Teleport to="body">
-      <Modal v-if="isModalOpen1" @close="closeModal1">
+      <Modal v-if="isModalOpen21" @close="closeModal21">
         <template #body>
           <div class="text-center text-m-center text-light" style="width: 240px">
             <p>영향도 피드백을 하시겠습니까?</p>
@@ -98,14 +95,48 @@
         </template>
         <template #footer>
           <div class="btn-group-3">
-            <BasicButton text="취소" button-style="cancel-btn" width="100%" />
-            <BasicButton text="피드백" width="100%" />
-            <BasicButton text="대결요청" width="100%" @click="openModal3" />
+            <BasicButton @click="closeModal21" text="취소" button-style="cancel-btn" width="100%" />
+            <BasicButton @click="openModal22" text="피드백" width="100%" />
+            <BasicButton @click="openModal21" text="대결요청" width="100%" />
           </div>
         </template>
       </Modal>
     </Teleport>
   </section>
+
+  <div>
+    <Teleport to="body">
+      <Modal v-if="isModalOpen22" @close="closeModal22">
+        <template #body>
+          <div style="width: 300px" class="text-light">
+            <div class="flex-box-center">
+              <span style="margin-right:12px">참조파일 :</span>
+              <div class="attached-file-list flex-box-center">
+                <span class="text-light">pgfram609.c</span>
+                <span class="text-light">pgfram609.c</span>
+              </div>
+            </div>
+            <div class="text-center" style="margin: 24px auto;">
+              <p>에 대해 OK는 영향도 없음,~~22<br />
+                개발필요는 영향도 있음으로 담당자에 확인메일을<br />
+                처리합니다. 발송 하시겠습니까?</p>
+            </div>
+            <div class="flex-box-center">
+              <span style="margin-right:6px">변경내용</span>
+              <BasicInput style="width: 158px" />
+            </div>
+          </div>
+        </template>
+        <template #footer>
+          <div class="btn-group-3">
+            <BasicButton text="OK" button-style="cancel-btn" width="100%" />
+            <BasicButton text="개발필요" width="100%" @click="openModal23" />
+            <BasicButton text="취소" width="100%" @click="closeModal22" />
+          </div>
+        </template>
+      </Modal>
+    </Teleport>
+  </div>
 
   <div>
     <Teleport to="body">
@@ -141,9 +172,11 @@
     </Teleport>
   </div>
 
+
+  <!-- 모달  -->
   <div>
     <Teleport to="body">
-      <Modal v-if="isModalOpen3" @close="closeModal3">
+      <Modal v-if="false" @close="closeModal3">
         <template #body>
           <div class="info-box text-light" style="width: 300px;margin: -12px auto 24px;">
             <p><b>제목:</b> [영향도분석 취소알림] WR123-DP1</p>
@@ -181,7 +214,117 @@
       </Modal>
     </Teleport>
   </div>
+  <!-- 모달 : 선택 피드백 요청  -->
+  <div>
+    <Teleport to="body">
+      <Modal v-if="isModalOpen1" @close="closeModal1">
+        <template #body>
+          <div class="text-center text-m-center text-light" style="width: 240px">
+            <p>담당자에 영향도 확인요청 피드백을<br />요청하시겠습니까?</p>
+          </div>
+        </template>
+        <template #footer>
+          <div class="btn-group-4">
+            <BasicButton text="취소" button-style="cancel-btn" width="130px" />
+            <BasicButton text="발송/재발송" width="130px" />
+            <BasicButton @click="openConfirm1" text="자가확인" width="130px" />
+            <BasicButton @click="openConfirm2" text="요청자취소" width="130px" />
+          </div>
+        </template>
+      </Modal>
+    </Teleport>
+  </div>
+  <!-- 자가처리확인 1-3 -->
+  <div>
+    <Teleport to="body">
+      <Modal v-if="isConfirmOpen1" @close="closeConfirm1">
+        <template #body>
+          <div class="text-center text-light" style="width: 240px;margin: -12px auto 24px;">
+            <p>자가확인 처리 하시겠습니까?</p>
+          </div>
+        </template>
+        <template #footer>
+          <div class="btn-group-2">
+            <BasicButton @click="closeConfirm1" text="취소" button-style="cancel-btn" width="100%" />
+            <BasicButton @click="closeConfirm1" text="확인" width="100%" />
+          </div>
+        </template>
+      </Modal>
+    </Teleport>
+  </div>
+  <!-- 재발송 >  요청자취소 >  -->
+  <div>
+    <Teleport to="body">
+      <Modal v-if="isConfirmOpen2" @close="closeConfirm2">
+        <template #body>
+          <div style="width: 300px" class="text-light">
+            <div class="flex-box-center">
+              <span style="margin-right:12px">참조파일 :</span>
+              <div class="attached-file-list flex-box-center">
+                <span class="text-light">pgfram609.c</span>
+                <span class="text-light">pgfram609.c</span>
+              </div>
+            </div>
+            <div class="text-center" style="margin: 24px auto;">
+              <p>에 대한 영향도분석 확인요청 하시겠습니까?</p>
+            </div>
+            <div class="flex-box-center">
+              <span style="margin-right:26px">DBIO 있음</span>
+              <BasicToggle />
+            </div>
+            <div class="flex-box-center">
+              <span style="margin-right:6px">의견</span>
+              <BasicInput style="width: 158px" />
+            </div>
+          </div>
+        </template>
+        <template #footer>
+          <div class="btn-group-2">
+            <BasicButton @click="closeConfirm2" text="취소" button-style="cancel-btn" width="100%" />
+            <BasicButton @click="openConfirm3" text="발송" width="100%" />
+          </div>
+        </template>
+      </Modal>
+    </Teleport>
+  </div>
+  <!-- 재발송 > 요청자 취소 > 발송 -->
+  <div>
+    <Teleport to="body">
+      <Modal v-if="isConfirmOpen3" @close="closeConfirm3">
+        <template #body>
+          <div class="info-box text-light" style="width: 300px;margin: -12px auto 24px;">
+            <p><b>제목:</b> [영향도분석 취소알림] WR123-DP1</p>
+            <p><b>보낸이:</b> 홍길동</p>
+            <br />
+            <span>내용 :</span>
+            <br />
+            <div style="margin-left:20px">
+              <p><b>문서 DP번호:</b> WR1213-DP1</p>
+              <p><b>경로:</b> 2024-03-07 23:42</p>
+              <p><b>참조파일:</b> 2024-03-07 23:42</p>
+              <p><b>연관프로그램:</b> 2024-03-07 23:42</p>
+              <p><b>파일:</b> pgfram609.c</p>
+            </div>
+            <br />
+            <p>에 대한 영향도분석 취소했습니다.</p>
+            <p>참고 바랍니다.</p>
+            <hr>
+            <p>DBIO 여부 : 없음</p>
+          </div>
 
+          <div class="flex-box-center text-light">
+            <span style="margin-right:6px">의견</span>
+            <div class="flex-box-center border-box text-light">
+              <span>오탐으로 확인되었습니다.</span>
+            </div>
+          </div>
+        </template>
+        <template #footer>
+          <div />
+        </template>
+      </Modal>
+    </Teleport>
+  </div>
 
 </template>
 
@@ -227,6 +370,12 @@ export default {
       isModalOpen1: false, // 모달 상태 변수
       isModalOpen2: false, // 모달 상태 변수
       isModalOpen3: false, // 모달 상태 변수
+      isModalOpen21: false, // 모달 상태 변수
+      isModalOpen22: false, // 모달 상태 변수
+      isModalOpen23: false, // 모달 상태 변수
+      isConfirmOpen1: false, // 모달 상태 변수
+      isConfirmOpen2: false, // 모달 상태 변수
+      isConfirmOpen3: false, // 모달 상태 변수
       requestColumns: [
         { label: 'NO', field: 'impactFeedbackIdx', sortable: false },
         {
@@ -238,40 +387,32 @@ export default {
           dateOutputFormat: 'yyyy/MM/dd',
           sortable: false,
         },
-        { label: '연관프로그램', field: 'wrFileName', sortable: false },
-        { label: '대상경로', field: 'tgPath', sortable: false },
-        { label: '참조파일', field: 'tgPgm', sortable: false },
-        { label: '설명', field: 'senderOpinion', sortable: false },
-        { label: '발송인', field: 'senderName', sortable: false },
-        { label: '부서', field: 'senderDbrnNm', sortable: false },
-        { label: '확인상태', field: 'feedbackStatus', sortable: false },
+        { label: '연관프로그램', field: 'wrFileName', sortable: true },
+        { label: '대상경로', field: 'tgPath', sortable: true },
+        { label: '참조파일', field: 'tgPgm', sortable: true },
+        { label: '설명', field: 'senderOpinion', sortable: true },
+        { label: '담당자', field: 'senderOpinion', sortable: true },  // 이따 수정 필드값
+        // { label: '발송인', field: 'senderName', sortable: true },
+        { label: '부서', field: 'senderDbrnNm', sortable: true },
+        { label: '팀명', field: 'senderDbrnNm', sortable: true }, // 이따 수정 필드값
+        { label: '확인상태', field: 'feedbackStatus', sortable: true },
         {
           label: '확인일',
           field: 'confirmationDate',
           type: 'date',
           dateInputFormat: 'yyyy-MM-dd',
           dateOutputFormat: 'yyyy/MM/dd',
-          sortable: false,
+          sortable: true,
         },
         { label: 'DBIO여부', field: 'dbioFlag', sortable: false },
-        {
-          label: '링크',
-          field: 'link',
-          sortable: false,
-          type: 'button',
-          btnText: '링크',
-          onClick: (row) => {
-            console.log(row);
-          },
-        },
         {
           label: '',
           field: 'feedback',
           sortable: false,
           type: 'button',
-          btnText: '피드백',
+          btnText: '재발송',
           onClick: (row) => {
-            console.log(row);
+            this.openModal1();
           },
         },
         { label: 'isMoreRow', field: 'isMoreRow', type: 'isMoreRow', hidden: true },
@@ -290,24 +431,25 @@ export default {
           type: 'date',
           dateInputFormat: 'yyyy-MM-dd HH:mm',
           dateOutputFormat: 'yyyy/MM/dd HH:mm',
-          sortable: false
+          sortable: true
         },
-        { label: '연관프로그램', field: 'wrFileName', sortable: false },
-        { label: '대상경로', field: 'tgPath', sortable: false },
-        { label: '참조파일', field: 'tgPgm', sortable: false },
-        { label: '설명', field: 'description', sortable: false },
-        { label: '발송인', field: 'sender', sortable: false },
-        { label: '부서', field: 'department', sortable: false },
-        { label: '확인상태', field: 'state', sortable: false },
+        { label: '연관프로그램', field: 'wrFileName', sortable: true },
+        { label: '대상경로', field: 'tgPath', sortable: true },
+        { label: '참조파일', field: 'tgPgm', sortable: true },
+        { label: '설명', field: 'description', sortable: true },
+        { label: '발송인', field: 'sender', sortable: true },
+        { label: '부서', field: 'department', sortable: true },
+        { label: '팀명', field: 'department', sortable: true },
+        { label: '확인상태', field: 'state', sortable: true },
         {
           label: '확인일',
           field: 'checkedAt',
           type: 'date',
-          dateInputFormat: 'yyyy-MM-dd HH:mm',
-          dateOutputFormat: 'yyyy/MM/dd HH:mm',
-          sortable: false
+          dateInputFormat: 'yyyy-MM-dd',
+          dateOutputFormat: 'yyyy/MM/dd',
+          sortable: true
         },
-        { label: 'DBIO여부', field: 'DBIO', sortable: false },
+        { label: 'DBIO여부', field: 'DBIO', sortable: true },
         {
           label: '링크', field: 'link', sortable: false, type: 'button', btnText: "링크", onClick: (row) => {
             console.log(row)
@@ -315,174 +457,174 @@ export default {
         },
         {
           label: '', field: 'feedback', sortable: false, type: 'button', btnText: "피드백", onClick: (row) => {
-            console.log(row)
+            this.openModal21()
           }
         },
       ],
       replyRows: [
       ],
-      tempDataDump : [
-  {
-    "impactFeedbackIdx": 12,
-    "wrCode": "WR1234-DP4",
-    "wrFileName": "s1230041",
-    "wrFilePath": "/KCC/SERVIC/",
-    "tgPgm": "11231239.xml",
-    "tgPath": "/target/path/1",
-    "prjId": "PRJ001",
-    "senderEmployee": "401732",
-    "senderName": "홍길동",
-    "senderDbrnCode": "D001",
-    "senderDbrnNm": "금융시스템부",
-    "senderEmail": "hong@example.com",
-    "receiverEmployee": "401731",
-    "receiverName": "김철수",
-    "receiverDbrnCode": "R001",
-    "receiverDbrnNm": "트레이딩시스템부",
-    "receiverEmail": "kim@example.com",
-    "directFlag": "Y",
-    "dbioFlag": "Y",
-    "senderOpinion": "확인 부탁드립니다.",
-    "sentDt": "2024-11-20",
-    "feedbackStatus": "DC",
-    "replyDt": "2024-11-22",
-    "receiverOpinion": "수정 필요",
-    "assignerFlag": "N",
-    "createDt": "2024-11-25 15:21:58",
-    "dispatchDate": "2024-11-19",
-    "targetPath": "/KCC/SERVIC/target_1",
-    "department": "금융시스템부",
-    "confirmationDate": "2024-11-22"
-  },
-  {
-    "impactFeedbackIdx": 13,
-    "wrCode": "WR1234-DP5",
-    "wrFileName": "s1230042",
-    "wrFilePath": "/KCC/SERVIC/",
-    "tgPgm": "11231240.xml",
-    "tgPath": "/target/path/2",
-    "prjId": "PRJ002",
-    "senderEmployee": "401733",
-    "senderName": "이영희",
-    "senderDbrnCode": "D002",
-    "senderDbrnNm": "트레이딩시스템부",
-    "senderEmail": "lee@example.com",
-    "receiverEmployee": "401734",
-    "receiverName": "박민수",
-    "receiverDbrnCode": "R002",
-    "receiverDbrnNm": "금융시스템부",
-    "receiverEmail": "park@example.com",
-    "directFlag": "N",
-    "dbioFlag": "N",
-    "senderOpinion": "다시 확인 부탁드립니다.",
-    "sentDt": "2024-11-21",
-    "feedbackStatus": "IC",
-    "replyDt": "2024-11-24",
-    "receiverOpinion": "확인 완료",
-    "assignerFlag": "Y",
-    "createDt": "2024-11-25 15:30:58",
-    "dispatchDate": "2024-11-20",
-    "targetPath": "/KCC/SERVIC/target_2",
-    "department": "트레이딩시스템부",
-    "confirmationDate": "2024-11-23"
-  },
-  {
-    "impactFeedbackIdx": 14,
-    "wrCode": "WR1234-DP6",
-    "wrFileName": "s1230043",
-    "wrFilePath": "/KCC/SERVIC/",
-    "tgPgm": "11231241.xml",
-    "tgPath": "/target/path/3",
-    "prjId": "PRJ003",
-    "senderEmployee": "401734",
-    "senderName": "최수정",
-    "senderDbrnCode": "D003",
-    "senderDbrnNm": "금융시스템부",
-    "senderEmail": "choi@example.com",
-    "receiverEmployee": "401735",
-    "receiverName": "정우성",
-    "receiverDbrnCode": "R003",
-    "receiverDbrnNm": "트레이딩시스템부",
-    "receiverEmail": "jung@example.com",
-    "directFlag": "Y",
-    "dbioFlag": "N",
-    "senderOpinion": "긴급 확인 부탁드립니다.",
-    "sentDt": "2024-11-19",
-    "feedbackStatus": "AP",
-    "replyDt": "2024-11-20",
-    "receiverOpinion": "완료",
-    "assignerFlag": "N",
-    "createDt": "2024-11-25 15:40:58",
-    "dispatchDate": "2024-11-18",
-    "targetPath": "/KCC/SERVIC/target_3",
-    "department": "금융시스템부",
-    "confirmationDate": "2024-11-20"
-  },
-  {
-    "impactFeedbackIdx": 15,
-    "wrCode": "WR1234-DP7",
-    "wrFileName": "s1230044",
-    "wrFilePath": "/KCC/SERVIC/",
-    "tgPgm": "11231242.xml",
-    "tgPath": "/target/path/4",
-    "prjId": "PRJ004",
-    "senderEmployee": "401735",
-    "senderName": "김유진",
-    "senderDbrnCode": "D004",
-    "senderDbrnNm": "트레이딩시스템부",
-    "senderEmail": "kimyu@example.com",
-    "receiverEmployee": "401736",
-    "receiverName": "장현석",
-    "receiverDbrnCode": "R004",
-    "receiverDbrnNm": "금융시스템부",
-    "receiverEmail": "jang@example.com",
-    "directFlag": "Y",
-    "dbioFlag": "N",
-    "senderOpinion": "내용 검토 부탁드립니다.",
-    "sentDt": "2024-11-18",
-    "feedbackStatus": "DC",
-    "replyDt": "2024-11-19",
-    "receiverOpinion": "확인 중",
-    "assignerFlag": "N",
-    "createDt": "2024-11-25 15:45:58",
-    "dispatchDate": "2024-11-17",
-    "targetPath": "/KCC/SERVIC/target_4",
-    "department": "트레이딩시스템부",
-    "confirmationDate": "2024-11-18"
-  },
-  {
-    "impactFeedbackIdx": 16,
-    "wrCode": "WR1234-DP8",
-    "wrFileName": "s1230045",
-    "wrFilePath": "/KCC/SERVIC/",
-    "tgPgm": "11231243.xml",
-    "tgPath": "/target/path/5",
-    "prjId": "PRJ005",
-    "senderEmployee": "401736",
-    "senderName": "박지훈",
-    "senderDbrnCode": "D005",
-    "senderDbrnNm": "금융시스템부",
-    "senderEmail": "parkji@example.com",
-    "receiverEmployee": "401737",
-    "receiverName": "이하나",
-    "receiverDbrnCode": "R005",
-    "receiverDbrnNm": "트레이딩시스템부",
-    "receiverEmail": "leeha@example.com",
-    "directFlag": "N",
-    "dbioFlag": "Y",
-    "senderOpinion": "최종 검토 부탁드립니다.",
-    "sentDt": "2024-11-16",
-    "feedbackStatus": "AP",
-    "replyDt": "2024-11-18",
-    "receiverOpinion": "확인 완료",
-    "assignerFlag": "Y",
-    "createDt": "2024-11-25 15:50:58",
-    "dispatchDate": "2024-11-15",
-    "targetPath": "/KCC/SERVIC/target_5",
-    "department": "금융시스템부",
-    "confirmationDate": "2024-11-17"
-  }
-]
+      tempDataDump: [
+        {
+          "impactFeedbackIdx": 12,
+          "wrCode": "WR1234-DP4",
+          "wrFileName": "s1230041",
+          "wrFilePath": "/KCC/SERVIC/",
+          "tgPgm": "11231239.xml",
+          "tgPath": "/target/path/1",
+          "prjId": "PRJ001",
+          "senderEmployee": "401732",
+          "senderName": "홍길동",
+          "senderDbrnCode": "D001",
+          "senderDbrnNm": "금융시스템부",
+          "senderEmail": "hong@example.com",
+          "receiverEmployee": "401731",
+          "receiverName": "김철수",
+          "receiverDbrnCode": "R001",
+          "receiverDbrnNm": "트레이딩시스템부",
+          "receiverEmail": "kim@example.com",
+          "directFlag": "Y",
+          "dbioFlag": "Y",
+          "senderOpinion": "확인 부탁드립니다.",
+          "sentDt": "2024-11-20",
+          "feedbackStatus": "DC",
+          "replyDt": "2024-11-22",
+          "receiverOpinion": "수정 필요",
+          "assignerFlag": "N",
+          "createDt": "2024-11-25 15:21:58",
+          "dispatchDate": "2024-11-19",
+          "targetPath": "/KCC/SERVIC/target_1",
+          "department": "금융시스템부",
+          "confirmationDate": "2024-11-22"
+        },
+        {
+          "impactFeedbackIdx": 13,
+          "wrCode": "WR1234-DP5",
+          "wrFileName": "s1230042",
+          "wrFilePath": "/KCC/SERVIC/",
+          "tgPgm": "11231240.xml",
+          "tgPath": "/target/path/2",
+          "prjId": "PRJ002",
+          "senderEmployee": "401733",
+          "senderName": "이영희",
+          "senderDbrnCode": "D002",
+          "senderDbrnNm": "트레이딩시스템부",
+          "senderEmail": "lee@example.com",
+          "receiverEmployee": "401734",
+          "receiverName": "박민수",
+          "receiverDbrnCode": "R002",
+          "receiverDbrnNm": "금융시스템부",
+          "receiverEmail": "park@example.com",
+          "directFlag": "N",
+          "dbioFlag": "N",
+          "senderOpinion": "다시 확인 부탁드립니다.",
+          "sentDt": "2024-11-21",
+          "feedbackStatus": "IC",
+          "replyDt": "2024-11-24",
+          "receiverOpinion": "확인 완료",
+          "assignerFlag": "Y",
+          "createDt": "2024-11-25 15:30:58",
+          "dispatchDate": "2024-11-20",
+          "targetPath": "/KCC/SERVIC/target_2",
+          "department": "트레이딩시스템부",
+          "confirmationDate": "2024-11-23"
+        },
+        {
+          "impactFeedbackIdx": 14,
+          "wrCode": "WR1234-DP6",
+          "wrFileName": "s1230043",
+          "wrFilePath": "/KCC/SERVIC/",
+          "tgPgm": "11231241.xml",
+          "tgPath": "/target/path/3",
+          "prjId": "PRJ003",
+          "senderEmployee": "401734",
+          "senderName": "최수정",
+          "senderDbrnCode": "D003",
+          "senderDbrnNm": "금융시스템부",
+          "senderEmail": "choi@example.com",
+          "receiverEmployee": "401735",
+          "receiverName": "정우성",
+          "receiverDbrnCode": "R003",
+          "receiverDbrnNm": "트레이딩시스템부",
+          "receiverEmail": "jung@example.com",
+          "directFlag": "Y",
+          "dbioFlag": "N",
+          "senderOpinion": "긴급 확인 부탁드립니다.",
+          "sentDt": "2024-11-19",
+          "feedbackStatus": "AP",
+          "replyDt": "2024-11-20",
+          "receiverOpinion": "완료",
+          "assignerFlag": "N",
+          "createDt": "2024-11-25 15:40:58",
+          "dispatchDate": "2024-11-18",
+          "targetPath": "/KCC/SERVIC/target_3",
+          "department": "금융시스템부",
+          "confirmationDate": "2024-11-20"
+        },
+        {
+          "impactFeedbackIdx": 15,
+          "wrCode": "WR1234-DP7",
+          "wrFileName": "s1230044",
+          "wrFilePath": "/KCC/SERVIC/",
+          "tgPgm": "11231242.xml",
+          "tgPath": "/target/path/4",
+          "prjId": "PRJ004",
+          "senderEmployee": "401735",
+          "senderName": "김유진",
+          "senderDbrnCode": "D004",
+          "senderDbrnNm": "트레이딩시스템부",
+          "senderEmail": "kimyu@example.com",
+          "receiverEmployee": "401736",
+          "receiverName": "장현석",
+          "receiverDbrnCode": "R004",
+          "receiverDbrnNm": "금융시스템부",
+          "receiverEmail": "jang@example.com",
+          "directFlag": "Y",
+          "dbioFlag": "N",
+          "senderOpinion": "내용 검토 부탁드립니다.",
+          "sentDt": "2024-11-18",
+          "feedbackStatus": "DC",
+          "replyDt": "2024-11-19",
+          "receiverOpinion": "확인 중",
+          "assignerFlag": "N",
+          "createDt": "2024-11-25 15:45:58",
+          "dispatchDate": "2024-11-17",
+          "targetPath": "/KCC/SERVIC/target_4",
+          "department": "트레이딩시스템부",
+          "confirmationDate": "2024-11-18"
+        },
+        {
+          "impactFeedbackIdx": 16,
+          "wrCode": "WR1234-DP8",
+          "wrFileName": "s1230045",
+          "wrFilePath": "/KCC/SERVIC/",
+          "tgPgm": "11231243.xml",
+          "tgPath": "/target/path/5",
+          "prjId": "PRJ005",
+          "senderEmployee": "401736",
+          "senderName": "박지훈",
+          "senderDbrnCode": "D005",
+          "senderDbrnNm": "금융시스템부",
+          "senderEmail": "parkji@example.com",
+          "receiverEmployee": "401737",
+          "receiverName": "이하나",
+          "receiverDbrnCode": "R005",
+          "receiverDbrnNm": "트레이딩시스템부",
+          "receiverEmail": "leeha@example.com",
+          "directFlag": "N",
+          "dbioFlag": "Y",
+          "senderOpinion": "최종 검토 부탁드립니다.",
+          "sentDt": "2024-11-16",
+          "feedbackStatus": "AP",
+          "replyDt": "2024-11-18",
+          "receiverOpinion": "확인 완료",
+          "assignerFlag": "Y",
+          "createDt": "2024-11-25 15:50:58",
+          "dispatchDate": "2024-11-15",
+          "targetPath": "/KCC/SERVIC/target_5",
+          "department": "금융시스템부",
+          "confirmationDate": "2024-11-17"
+        }
+      ]
 
     }
   },
@@ -495,10 +637,10 @@ export default {
       // try {
       axios.get('http://localhost:9000/api/effect-feedback')
         .then(response => {
-          const newRows =  this.tempDataDump;
+          const newRows = this.tempDataDump;
           // const newRows = response.data.data;
           let result_data;
-          if(response?.data?.hasMore == true){
+          if (response?.data?.hasMore == true) {
             result_data = _.concat(newRows, { isMoreRow: true });
           } else {
             result_data = _.concat(newRows, { isMoreRow: false });
@@ -519,15 +661,15 @@ export default {
           const newRows = this.tempDataDump;
           // const newRows = response.data.data;
           let result_data;
-          if(response?.data?.hasMore == true && this.replyRows.length < 50){
+          if (response?.data?.hasMore == true && this.replyRows.length < 50) {
             result_data = _.concat(newRows, { isMoreRow: true });
           } else {
             result_data = _.concat(newRows, { isMoreRow: false });
-          } 
-        const oldRows = [...this.replyRows]; // 기존 데이터를 복사
-        const filteredRows = _.filter(this.replyRows, (row) => !(row.isMoreRow == true || row.isMoreRow == false));
+          }
+          const oldRows = [...this.replyRows]; // 기존 데이터를 복사
+          const filteredRows = _.filter(this.replyRows, (row) => !(row.isMoreRow == true || row.isMoreRow == false));
 
-        this.replyRows = _.concat(filteredRows, result_data);
+          this.replyRows = _.concat(filteredRows, result_data);
 
           // this.replyRows = result_data;
         })
@@ -555,11 +697,60 @@ export default {
     // 피드백 요청알림
     openModal3() {
       this.closeModal2()
+      this.closeModal22()
       console.log('isModalOpen2 ::: ')
       this.isModalOpen3 = true; // 모달 열기
     },
     closeModal3() {
       this.isModalOpen3 = false; // 모달 닫기
+    },
+    
+    // 영향도피드백 부분
+    openModal21() {
+      console.log('isModalOpen ::: ')
+      this.isModalOpen21 = true; // 모달 열기
+    },
+    closeModal21() {
+      this.isModalOpen21 = false; // 모달 닫기
+    },
+    // 피드백발송
+    openModal22() {
+      this.closeModal21()
+      console.log('isModalOpen22 ::: ')
+      this.isModalOpen22 = true; // 모달 열기
+    },
+    closeModal22() {
+      this.isModalOpen22 = false; // 모달 닫기
+    },
+    // 피드백 요청알림
+    openModal23() {
+      this.closeModal22()
+      console.log('openModal23 ::: ')
+      this.isModalOpen23 = true; // 모달 열기
+    },
+    closeModal23() {
+      this.isModalOpen3 = false; // 모달 닫기
+    },
+    openConfirm1() {
+      this.closeModal1();
+      this.isConfirmOpen1 = true;
+    },
+    closeConfirm1() {
+      this.isConfirmOpen1 = false; // 모달 닫기
+    },
+    openConfirm2() {
+      this.closeModal1();
+      this.isConfirmOpen2 = true;
+    },
+    closeConfirm2() {
+      this.isConfirmOpen2 = false; // 모달 닫기
+    },
+    openConfirm3() {
+      this.closeModal2();
+      this.isConfirmOpen3 = true;
+    },
+    closeConfirm3() {
+      this.isConfirmOpen3 = false; // 모달 닫기
     },
   },
   watch: {

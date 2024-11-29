@@ -4,32 +4,29 @@
       <div class="common-sub-header">
         <span class="text-accent-bold">등록일</span>
         <div class="date-range-select">
-          <DatePicker :on-select="(d) => console.log(d)"/>
+          <DatePicker :on-select="(d) => console.log(d)" />
           <span>~</span>
-          <DatePicker :on-select="(d) => console.log(d)"/>
+          <DatePicker :on-select="(d) => console.log(d)" />
         </div>
 
         <span class="text-accent-bold">시스템</span>
-        <Dropdown
-          :options="['계정계', '정보계', '실루엣', 'GIT']"
-          v-model="selectedSystem"
-          :on-select="(option) => selectedSystem = option"
-        />
+        <Dropdown :options="['계정계', '정보계', '실루엣', 'GIT']" v-model="selectedSystem"
+          :on-select="(option) => selectedSystem = option" />
 
         <span class="text-accent-bold" style="margin-left: 25px;">업무코드</span>
-        <BasicInput id="work-code" name="work-code"/>
+        <BasicInput id="work-code" name="work-code" />
 
         <span class="text-accent-bold">업무명</span>
-        <BasicInput id="work-name" name="work-name"/>
+        <BasicInput id="work-name" name="work-name" />
 
         <span class="text-accent-bold">담당자</span>
-        <BasicInput id="manager" name="manager"/>
+        <BasicInput id="manager" name="manager" />
 
         <span class="text-accent-bold">등록자</span>
-        <BasicInput id="reg-user" name="reg-user"/>
+        <BasicInput id="reg-user" name="reg-user" />
 
         <div class="search-buttons">
-          <BasicButton text="검색" class="search-btn"/>
+          <BasicButton text="검색" class="search-btn" />
         </div>
       </div>
 
@@ -39,65 +36,151 @@
   <article class="page-area">
     <section style="margin-top: 12px">
       <div class="flex-btn-box" style="margin-bottom: 20px;">
-        <BasicButton text="엑셀 다운로드"/>
+        <BasicButton text="엑셀 다운로드" />
         <BasicButton text="레포-담당자등록" @click="openModal1" />
       </div>
-      <BasicTable :columns="columns" :rows="rows" enable-row-check/>
+      <BasicTableInfinite :columns="columns" :rows="tableList" enable-row-check />
     </section>
   </article>
-<!-- 레포지토리-담당자 등록/수정 -->
+  <!-- 레포지토리-담당자 등록-->
   <div>
-      <Teleport to="body">
-        <Modal v-if="isModalOpen1" @close="closeModal1">
-          <template #header>
-            <div class="modal-h3">
-              <h3>레포지토리-담당자 등록/수정</h3>
-            </div>
-          </template>
-          <template #body>
-            <div style="width: 600px" class="text-light modal-form">
-              <div style="grid-column: 1 / 3">
-                <BasicInput id="업무명" label="업무명*" placeholder="입력해주세요"/>
-              </div>
-
-              <div class="modal-form-select">
-                <BasicInput id="시스템구분" label="시스템구분*"/>
-              </div>
-              <div class="modal-form-select">
-                <BasicInput id="업무코드" label="업무코드*"/>
-              </div>
-
-              <BasicInput id="담당자" label="담당자"/>
-              <BasicInput id="부서" style="margin-top: 31px;"/>
-              <BasicInput id="담당자2" style="margin-top: -14px;"/>
-              <BasicInput id="부서2" style="margin-top: -14px;"/>
-
-              <div class="modal-form-select" style="grid-column: 1 / 3">
-                <span><b>비고</b></span>
-                <textarea name="note" id="note2" rows="5" placeholder="이상없음"
-                          class="basic-textarea" style="font-size: 12px"/>
-              </div>
+    <Teleport to="body">
+      <Modal v-if="isModalOpen1" @close="closeModal1">
+        <template #header>
+          <div class="modal-h3">
+            <h3>레포지토리-담당자 등록</h3>
+          </div>
+        </template>
+        <template #body>
+          <div style="width: 600px" class="text-light modal-form">
+            <div style="grid-column: 1 / 3">
+              <BasicInput id="업무명" label="업무명*" placeholder="입력해주세요" />
             </div>
 
-          </template>
-          <template #footer>
-            <BasicButton text="확인" width="80px"/>
-          </template>
-        </Modal>
-      </Teleport>
-    </div>
+            <div class="modal-form-select">
+              <BasicInput id="시스템구분" label="시스템구분*" />
+            </div>
+            <div class="modal-form-select">
+              <BasicInput id="업무코드" label="업무코드*" />
+            </div>
+
+            <BasicInput id="담당자" label="담당자" />
+            <BasicInput id="부서" style="margin-top: 31px;" />
+            <BasicInput id="담당자2" style="margin-top: -14px;" />
+            <BasicInput id="부서2" style="margin-top: -14px;" />
+
+            <div class="modal-form-select" style="grid-column: 1 / 3">
+              <span><b>비고</b></span>
+              <textarea name="note" id="note2" rows="5" placeholder="이상없음" class="basic-textarea"
+                style="font-size: 12px" />
+            </div>
+          </div>
+
+        </template>
+        <template #footer>
+          <BasicButton text="확인" width="80px" />
+        </template>
+      </Modal>
+    </Teleport>
+  </div>
+
+  <!-- 레포지토리-담당자 수정-->
+  <div>
+    <Teleport to="body">
+      <Modal v-if="isModalOpen2" @close="closeModal2">
+        <template #header>
+          <div class="modal-h3">
+            <h3>레포지토리-담당자 수정</h3>
+          </div>
+        </template>
+        <template #body>
+          <div style="width: 600px" class="text-light modal-form">
+            <div style="grid-column: 1 / 3">
+              <BasicInput id="업무명" label="업무명*" placeholder="입력해주세요" />
+            </div>
+
+            <div class="modal-form-select">
+              <BasicInput id="시스템구분" label="시스템구분*" />
+            </div>
+            <div class="modal-form-select">
+              <BasicInput id="업무코드" label="업무코드*" />
+            </div>
+
+            <BasicInput id="담당자" label="담당자" />
+            <BasicInput id="부서" style="margin-top: 31px;" />
+            <BasicInput id="담당자2" style="margin-top: -14px;" />
+            <BasicInput id="부서2" style="margin-top: -14px;" />
+
+            <div class="modal-form-select" style="grid-column: 1 / 3">
+              <span><b>비고</b></span>
+              <textarea name="note" id="note2" rows="5" placeholder="이상없음" class="basic-textarea"
+                style="font-size: 12px" />
+            </div>
+          </div>
+
+        </template>
+        <template #footer>
+          <BasicButton text="확인" width="80px" />
+        </template>
+      </Modal>
+    </Teleport>
+  </div>
+
+  <!-- 레포지토리-담당자 상세-->
+  <div>
+    <Teleport to="body">
+      <Modal v-if="isModalOpen3" @close="closeModal3">
+        <template #header>
+          <div class="modal-h3">
+            <h3>레포지토리-담당자 상세</h3>
+          </div>
+        </template>
+        <template #body>
+          <div style="width: 600px" class="text-light modal-form">
+            <div style="grid-column: 1 / 3">
+              <BasicInput id="업무명" label="업무명*" placeholder="입력해주세요" />
+            </div>
+
+            <div class="modal-form-select">
+              <BasicInput id="시스템구분" label="시스템구분*" />
+            </div>
+            <div class="modal-form-select">
+              <BasicInput id="업무코드" label="업무코드*" />
+            </div>
+
+            <BasicInput id="담당자" label="담당자" />
+            <BasicInput id="부서" style="margin-top: 31px;" />
+            <BasicInput id="담당자2" style="margin-top: -14px;" />
+            <BasicInput id="부서2" style="margin-top: -14px;" />
+
+            <div class="modal-form-select" style="grid-column: 1 / 3">
+              <span><b>비고</b></span>
+              <textarea name="note" id="note2" rows="5" placeholder="이상없음" class="basic-textarea"
+                style="font-size: 12px" />
+            </div>
+          </div>
+
+        </template>
+        <template #footer>
+          <BasicButton text="확인" width="80px" />
+        </template>
+      </Modal>
+    </Teleport>
+  </div>
 
 </template>
 
 <script>
 import SubHeader from "@/components/layout/SubHeader";
 import BasicTable from "@/components/common/BasicTable";
+import BasicTableInfinite from "@/components/common/BasicTableInfinite";
 import Dropdown from "@/components/common/Dropdown";
 import BasicInput from "@/components/common/BasicInput";
 import BasicButton from "@/components/common/BasicButton";
 import DatePicker from "@/components/common/DatePicker";
 import Modal from "@/components/common/Modal";
-import {ref} from "vue";
+import { ref } from "vue";
+import axios from 'axios';
 
 let selectedSystem = ref("계정계");
 
@@ -105,6 +188,7 @@ export default {
   name: "ManagementPage",
   components: {
     BasicTable,
+    BasicTableInfinite,
     SubHeader,
     Dropdown,
     BasicInput,
@@ -123,47 +207,264 @@ export default {
       isModalOpen2: false, // 모달 상태 변수
       isModalOpen3: false, // 모달 상태 변수
       columns: [
-        {label: 'NO', field: 'NO', sortable: false},
         {
-          label: '등록일',
-          field: 'createdAt',
-          type: 'date',
-          dateInputFormat: 'yyyy-MM-dd HH:mm',
-          dateOutputFormat: 'yyyy/MM/dd HH:mm'
+          label: 'NO', field: 'repoManagerIdx', sortable: false,
+          onClick: (row) => {
+            console.log(row)
+            this.openModal3();
+          },
         },
         {
           label: '수정일',
-          field: 'editedAt',
+          field: 'modifyDt',
           type: 'date',
-          dateInputFormat: 'yyyy-MM-dd HH:mm',
-          dateOutputFormat: 'yyyy/MM/dd HH:mm'
+          dateInputFormat: 'yyyy-MM-dd',
+          dateOutputFormat: 'yyyy/MM/dd'
         },
-        {label: '시스템구분', field: 'system'},
-        {label: '업부코드', field: 'workCode'},
-        {label: '업부명', field: 'workName'},
-        {label: '담당자', field: 'manager'},
-        {label: '부서', field: 'department'},
-        {label: '등록자', field: 'regUser'},
-        {label: '비고', field: 'note'},
+        { label: '시스템구분', field: 'moduleType' },
+        { label: '업무코드', field: 'taskCode' },
+        {
+          label: '업무명', field: 'taskNm',
+          onClick: (row) => {
+            console.log(row)
+            this.openModal3();
+          },
+        },
+        { label: '담당자', field: 'userNameList' },
+        { label: '부서', field: 'dbrnNmList' },
+        { label: '팀명', field: 'dbrnNmList' },
+        { label: '수정자', field: 'uploader' },
+        { label: '비고', field: 'notes' },
         {
           label: '', field: 'modify', sortable: false, type: 'modify',
           onClickEdit: (row) => {
             console.log(row)
+            this.openModal2();
           },
           onClickDelete: (row) => {
             console.log(row)
           }
         }
       ],
-      rows: [
+
+      tableList: [
         {
           NO: "1", createdAt: "2024-11-11 13:00", editedAt: "2024-11-11 13:00", system: "test",
           workCode: "test", workName: "test", manager: "test", regUser: "test", note: "test"
         }
       ],
+      tempDataDump:
+      {
+        "code": 200,
+        "message": "요청 성공",
+        "data": [
+          {
+            "repoManagerIdx": 2,
+            "moduleType": "COR",
+            "taskCode": "ASDW",
+            "taskNm": "영업부",
+            "managerIds": "123456,123457",
+            "userIdList": [
+              123456,
+              123457
+            ],
+            "userNameList": [
+              "홍길동",
+              "김철수"
+            ],
+            "dbrnNmList": [
+              "테스트센터",
+              "테스트전략부"
+            ],
+            "teamNmList": [
+              "임시팀",
+              "임시팀"
+            ],
+            "notes": "임시등록",
+            "modifier": 0,
+            "modifierName": "김성환",
+            "modifyDt": "2024-11-15",
+            "uploader": 1,
+            "createDt": "2024-11-15"
+          },
+          {
+            "repoManagerIdx": 2,
+            "moduleType": "COR",
+            "taskCode": "ASDW",
+            "taskNm": "영업부",
+            "managerIds": "123456,123457",
+            "userIdList": [
+              123456,
+              123457
+            ],
+            "userNameList": [
+              "홍길동",
+              "김철수"
+            ],
+            "dbrnNmList": [
+              "테스트센터",
+              "테스트전략부"
+            ],
+            "teamNmList": [
+              "임시팀",
+              "임시팀"
+            ],
+            "notes": "임시등록",
+            "modifier": 0,
+            "modifierName": "김성환",
+            "modifyDt": "2024-11-15",
+            "uploader": 1,
+            "createDt": "2024-11-15"
+          },
+          {
+            "repoManagerIdx": 2,
+            "moduleType": "COR",
+            "taskCode": "ASDW",
+            "taskNm": "영업부",
+            "managerIds": "123456,123457",
+            "userIdList": [
+              123456,
+              123457
+            ],
+            "userNameList": [
+              "홍길동",
+              "김철수"
+            ],
+            "dbrnNmList": [
+              "테스트센터",
+              "테스트전략부"
+            ],
+            "teamNmList": [
+              "임시팀",
+              "임시팀"
+            ],
+            "notes": "임시등록",
+            "modifier": 0,
+            "modifierName": "김성환",
+            "modifyDt": "2024-11-15",
+            "uploader": 1,
+            "createDt": "2024-11-15"
+          },
+          {
+            "repoManagerIdx": 2,
+            "moduleType": "COR",
+            "taskCode": "ASDW",
+            "taskNm": "영업부",
+            "managerIds": "123456,123457",
+            "userIdList": [
+              123456,
+              123457
+            ],
+            "userNameList": [
+              "홍길동",
+              "김철수"
+            ],
+            "dbrnNmList": [
+              "테스트센터",
+              "테스트전략부"
+            ],
+            "teamNmList": [
+              "임시팀",
+              "임시팀"
+            ],
+            "notes": "임시등록",
+            "modifier": 0,
+            "modifierName": "김성환",
+            "modifyDt": "2024-11-15",
+            "uploader": 1,
+            "createDt": "2024-11-15"
+          },
+          {
+            "repoManagerIdx": 2,
+            "moduleType": "COR",
+            "taskCode": "ASDW",
+            "taskNm": "영업부",
+            "managerIds": "123456,123457",
+            "userIdList": [
+              123456,
+              123457
+            ],
+            "userNameList": [
+              "홍길동",
+              "김철수"
+            ],
+            "dbrnNmList": [
+              "테스트센터",
+              "테스트전략부"
+            ],
+            "teamNmList": [
+              "임시팀",
+              "임시팀"
+            ],
+            "notes": "임시등록",
+            "modifier": 0,
+            "modifierName": "김성환",
+            "modifyDt": "2024-11-15",
+            "uploader": 1,
+            "createDt": "2024-11-15"
+          },
+          {
+            "repoManagerIdx": 2,
+            "moduleType": "COR",
+            "taskCode": "ASDW",
+            "taskNm": "영업부",
+            "managerIds": "123456,123457",
+            "userIdList": [
+              123456,
+              123457
+            ],
+            "userNameList": [
+              "홍길동",
+              "김철수"
+            ],
+            "dbrnNmList": [
+              "테스트센터",
+              "테스트전략부"
+            ],
+            "teamNmList": [
+              "임시팀",
+              "임시팀"
+            ],
+            "notes": "임시등록",
+            "modifier": 0,
+            "modifierName": "김성환",
+            "modifyDt": "2024-11-15",
+            "uploader": 1,
+            "createDt": "2024-11-15"
+          }
+        ],
+        "page": 1,
+        "size": 20,
+        "totalPages": 1,
+        "totalElements": 2
+      }
+
     }
   },
   methods: {
+
+    async initData() {
+      this.loading = true;
+      this.error = null;
+
+      axios.get('http://localhost:9000/api/test')
+        .then(response => {
+          const newRows = this.tempDataDump.data;
+          // const newRows = response.data.data;
+          let result_data;
+          if (response?.data?.hasMore == true) {
+            result_data = _.concat(newRows, { isMoreRow: true });
+          } else {
+            result_data = _.concat(newRows, { isMoreRow: false });
+          }
+          this.tableList = result_data;
+          console.log(this.tableList);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+
     // 영향도피드백
     openModal1() {
       console.log('isModalOpen ::: ')
@@ -190,6 +491,15 @@ export default {
     closeModal3() {
       this.isModalOpen3 = false; // 모달 닫기
     },
+  },
+  mounted() {
+    // 컴포넌트가 마운트된 후 호출되는 라이프사이클 훅
+    console.log('Component mounted');
+    this.initData();
+  },
+  beforeUnmount() {
+    // 기존 beforeDestroy의 로직을 여기로 옮기면 됩니다.
+    console.log('Component will be destroyed');
   }
 }
 </script>
@@ -200,6 +510,7 @@ export default {
   gap: 6px;
   align-items: center;
 }
+
 .modal-examples {
   width: 60%;
   display: grid;

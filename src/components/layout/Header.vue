@@ -68,10 +68,15 @@ export default {
         url: "/web/search",
         icon: "search.png"
       },
+      // {
+      //   name: '영향도 피드백',
+      //   // url: "/web/effect-feedback",
+      //   url: "/",
+      //   icon: "effect.png"
+      // },
       {
         name: '영향도 피드백',
-        // url: "/web/effect-feedback",
-        url: "/",
+        url: "/web/effect-feedback",
         icon: "effect.png"
       },
       {
