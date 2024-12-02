@@ -210,7 +210,7 @@
   <section class="modal-examples">
 
     <div>
-      <BasicButton @click="showSearchParam = true" text="검색 파라미터 가변"/>
+      <BasicButton @click="showSearchParam = true" text="검색 파라미터 가변" style="width: 100px;"/>
       <Teleport to="body">
         <Modal :show="showSearchParam" @close="showSearchParam = false">
           <template #body>

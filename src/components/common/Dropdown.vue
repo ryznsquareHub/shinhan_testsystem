@@ -82,11 +82,28 @@ export default {
 
 .dropdown-button span {
   margin-right: 8px;
+  min-height: 22px;
 }
 
 .dropdown-menu {
   position: absolute;
   top: calc(100% - 3px);
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #BCBCBC;
+  border-top: none;
+  z-index: 1000;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding-inline-start: 0;
+  font-size: 15px;
+  max-height: 94px;
+  overflow-y: overlay;
+}
+.resource-input .dropdown-menu {
+  position: absolute;
+  top: calc(100% - 35px) !important;
   left: 0;
   width: 100%;
   background-color: white;

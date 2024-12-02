@@ -19,10 +19,19 @@
     :max-height="'350px'">
     <template #table-row="props">
       <span v-if="props.column.type === 'button'">
+        
         <BasicButton
           @click="props.column.onClick(props.formattedRow)"
-          :text="props.column.btnText"
+          v-if="props.formattedRow?.isMoreRow === ''"
+          :text="props.formattedRow?.isMoreRow == ''"
         />
+        <div v-else>-</div>
+        
+        <!-- <BasicButton
+          @click="props.column.onClick(props.formattedRow)"
+          v-if="props.formattedRow?.isMoreRow == true"
+          :text="props.column.btnText"
+        /> -->
       </span>
       <span v-if="props.column.type === 'modify'">
         <div class="modify-btn">
@@ -41,9 +50,10 @@
                alt="delete" width="18px">
         </div>
       </span>
-      <span v-if="props.formattedRow.isMoreRow  && (props.formattedRow.isMoreRow == true || props.formattedRow.isMoreRow == false)">
-        {{props.formattedRow.isMoreRow}} 
-            <div v-if="props.formattedRow.isMoreRow == true" class="table-container" v-infinite-scroll="onLoadMore"></div>
+      <span v-if="props.formattedRow?.isMoreRow  && (props.formattedRow?.isMoreRow == true || props.formattedRow?.isMoreRow == false)">
+            <div v-if="props.formattedRow?.isMoreRow == true" class="table-container" v-infinite-scroll="onLoadMore">
+              k1
+            </div>
             <div v-else>kk</div>
       </span>
       <!-- <span v-if="props.formattedRow.isMoreRow == false">

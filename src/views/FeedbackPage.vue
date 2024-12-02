@@ -22,7 +22,7 @@
           </svg>
           <span :class="{ 'activeView': selectedView === '회신' }">회신할 목록</span>
         </div>
-      </div>
+      </div>~
     </template>
   </SubHeader>
 
@@ -225,7 +225,7 @@
         </template>
         <template #footer>
           <div class="btn-group-4">
-            <BasicButton text="취소" button-style="cancel-btn" width="130px" />
+            <BasicButton @click="closeModal1" text="취소" button-style="cancel-btn" width="130px" />
             <BasicButton text="발송/재발송" width="130px" />
             <BasicButton @click="openConfirm1" text="자가확인" width="130px" />
             <BasicButton @click="openConfirm2" text="요청자취소" width="130px" />
@@ -328,6 +328,7 @@
 
 </template>
 
+
 <script>
 import SubHeader from "@/components/layout/SubHeader";
 import Dropdown from "@/components/common/Dropdown";
@@ -424,43 +425,54 @@ export default {
         }
       ],
       replyColumns: [
-        { label: 'NO', field: 'NO', sortable: false },
+        { "label": "NO", "field": "impactFeedbackIdx", "sortable": false },
         {
-          label: '발송일',
-          field: 'sentDt',
-          type: 'date',
-          dateInputFormat: 'yyyy-MM-dd HH:mm',
-          dateOutputFormat: 'yyyy/MM/dd HH:mm',
-          sortable: true
+          "label": "발송일",
+          "field": "dispatchDate",
+          "type": "date",
+          "dateInputFormat": "yyyy-MM-dd",
+          "dateOutputFormat": "yyyy/MM/dd",
+          "sortable": true
         },
-        { label: '연관프로그램', field: 'wrFileName', sortable: true },
-        { label: '대상경로', field: 'tgPath', sortable: true },
-        { label: '참조파일', field: 'tgPgm', sortable: true },
-        { label: '설명', field: 'description', sortable: true },
-        { label: '발송인', field: 'sender', sortable: true },
-        { label: '부서', field: 'department', sortable: true },
-        { label: '팀명', field: 'department', sortable: true },
-        { label: '확인상태', field: 'state', sortable: true },
+        { "label": "연관프로그램", "field": "wrFileName", "sortable": true },
+        { "label": "대상경로", "field": "tgPath", "sortable": true },
+        { "label": "참조파일", "field": "tgPgm", "sortable": true },
+        { "label": "설명", "field": "senderOpinion", "sortable": true },
+        { "label": "발송인", "field": "senderName", "sortable": true },
+        { "label": "부서", "field": "senderDbrnNm", "sortable": true },
+        { "label": "팀명", "field": "receiverDbrnNm", "sortable": true },
+        { "label": "확인상태", "field": "feedbackStatus", "sortable": true },
         {
-          label: '확인일',
-          field: 'checkedAt',
-          type: 'date',
-          dateInputFormat: 'yyyy-MM-dd',
-          dateOutputFormat: 'yyyy/MM/dd',
-          sortable: true
+          "label": "확인일",
+          "field": "confirmationDate",
+          "type": "date",
+          "dateInputFormat": "yyyy-MM-dd",
+          "dateOutputFormat": "yyyy/MM/dd",
+          "sortable": true
         },
-        { label: 'DBIO여부', field: 'DBIO', sortable: true },
+        { "label": "DBIO여부", "field": "dbioFlag", "sortable": true },
         {
-          label: '링크', field: 'link', sortable: false, type: 'button', btnText: "링크", onClick: (row) => {
-            console.log(row)
+          "label": "링크",
+          "field": "link",
+          "sortable": false,
+          "type": "button",
+          "btnText": "링크",
+          "onClick": (row) => {
+            console.log(row);
           }
         },
         {
-          label: '', field: 'feedback', sortable: false, type: 'button', btnText: "피드백", onClick: (row) => {
-            this.openModal21()
+          "label": "",
+          "field": "feedback",
+          "sortable": false,
+          "type": "button",
+          "btnText": "피드백",
+          "onClick": (row) => {
+            this.openModal21();
           }
-        },
-      ],
+        }
+      ]
+      ,
       replyRows: [
       ],
       tempDataDump: [
@@ -624,18 +636,20 @@ export default {
           "department": "금융시스템부",
           "confirmationDate": "2024-11-17"
         }
-      ]
-
+      ],
+      currentPage: '',
+      size: '',
+      isLoading: false,
     }
   },
   methods: {
-
-    async fetchData() {
-      this.loading = true;
+    async fetchData1() {
+      this.isLoading = true;
       this.error = null;
 
       // try {
       axios.get('http://localhost:9000/api/effect-feedback')
+        // axios.get('http://localhost:9000/api/infinite?page=1&size=10')
         .then(response => {
           const newRows = this.tempDataDump;
           // const newRows = response.data.data;
@@ -677,6 +691,66 @@ export default {
           console.error(error);
         });
     },
+    async fetchData2() {
+      this.loading = true;
+      this.error = null;
+      this.currentPage = 1;
+      this.size = 10;
+      // try {
+      axios.get(`http://localhost:9000/api/infinite?page=${this.currentPage}&size=${this.size}`)
+        .then(response => {
+          const newRows = this.tempDataDump;
+          // const newRows = response.data.data;
+          let result_data;
+          if (response?.data?.hasMore == true) {
+            result_data = _.concat(newRows, { isMoreRow: true });
+          } else {
+            result_data = _.concat(newRows, { isMoreRow: false });
+          }
+          this.replyRows = result_data;
+          console.log(this.replyRows);
+        })
+        .catch(error => {
+          console.error(error);
+        })
+        .finally(() => {
+          this.currentPage++;
+          this.isLoading = false; // 요청 완료
+        });
+        ;
+    },
+    async getInifiniteDataAdd(row) {
+      if (this.isLoading) {
+        return;
+      }
+      this.isLoading = true;
+      this.error = null;
+
+      axios.get(`http://localhost:9000/api/infinite?page=${this.currentPage}&size=${this.size}`)
+        .then(response => {
+          const newRows = this.tempDataDump;
+          // const newRows = response.data.data;
+          let result_data;
+          if (response?.data?.hasMore == true && this.replyRows.length < 50) {
+            result_data = _.concat(newRows, { isMoreRow: true });
+          } else {
+            result_data = _.concat(newRows, { isMoreRow: false });
+            // result_data = newRows;
+          }
+          const oldRows = [...this.replyRows]; // 기존 데이터를 복사
+          const filteredRows = _.filter(this.replyRows, (row) => !(row.isMoreRow == true || row.isMoreRow == false));
+
+          this.replyRows = _.concat(filteredRows, result_data);
+        })
+        .catch(error => {
+          console.error(error);
+        })
+        .finally(() => {
+          this.currentPage++;
+          this.isLoading = false; // 요청 완료
+        });
+      ;
+    },
     // 영향도피드백
     openModal1() {
       console.log('isModalOpen ::: ')
@@ -704,7 +778,7 @@ export default {
     closeModal3() {
       this.isModalOpen3 = false; // 모달 닫기
     },
-    
+
     // 영향도피드백 부분
     openModal21() {
       console.log('isModalOpen ::: ')
@@ -712,6 +786,7 @@ export default {
     },
     closeModal21() {
       this.isModalOpen21 = false; // 모달 닫기
+      this.isModalOpen1 = false; // 모달 닫기
     },
     // 피드백발송
     openModal22() {
@@ -763,7 +838,7 @@ export default {
   mounted() {
     // 컴포넌트가 마운트된 후 호출되는 라이프사이클 훅
     console.log('Component mounted');
-    this.fetchData();
+    this.fetchData2();
   },
 
   beforeUnmount() {

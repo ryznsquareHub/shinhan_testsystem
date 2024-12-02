@@ -15,7 +15,7 @@
           <BasicToggle v-if="selectedView === '영향도 분석'" :defaultActive="true" :handleChange="(v) => console.log(v)"
             label="헤더포함" />
         </div>
-        <Dropdown :options="['계정계', '정보계']" v-model="selectSystem" :on-select="(option) => selectSystem = option" />
+        <!-- <Dropdown :options="['계정계~~1', '정보계']" v-model="selectSystem" :on-select="(option) => selectSystem = option" /> -->
         <div v-if="selectedView === '코드검사'" class="doc-num doc-num1">
 
           <BasicInput v-if="radioGroup1Option == '2'" id="문서번호별" />
@@ -51,7 +51,7 @@
 
         <div class="search-buttons">
           <BasicButton v-if="selectedView !== '코드커버리지'" @click="openModal" text="검색 파라미터 가변" id="param-search"
-            class="search-btn" width="350px" />
+            class="search-btn" width="250px" />
           <BasicButton text="검색" class="search-btn" />
         </div>
       </div>
@@ -287,6 +287,11 @@ export default {
   color: var(--secondary) !important;
   font-weight: bold;
 }
+.resource-input>.dropdown .dropdown-button span {
+  color: var(--secondary) !important;
+  font-weight: bold;
+}
+
 
 .search-sub-header .dropdown {
   width: 130px;

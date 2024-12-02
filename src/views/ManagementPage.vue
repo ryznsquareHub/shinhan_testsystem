@@ -57,18 +57,29 @@
               <BasicInput id="업무명" label="업무명*" placeholder="입력해주세요" />
             </div>
 
-            <div class="modal-form-select">
-              <BasicInput id="시스템구분" label="시스템구분*" />
+            <div class="modal-form-select" style="margin-top:4px">
+              <span><b>시스템구분*</b></span>
+              <Dropdown :options="['sys1', 'sys2', 'sys3']" :on-select="() => { }" style="" />
             </div>
             <div class="modal-form-select">
               <BasicInput id="업무코드" label="업무코드*" />
             </div>
 
-            <BasicInput id="담당자" label="담당자" />
-            <BasicInput id="부서" style="margin-top: 31px;" />
-            <BasicInput id="담당자2" style="margin-top: -14px;" />
-            <BasicInput id="부서2" style="margin-top: -14px;" />
-
+            <span style="display: inline-flex; align-items: center;">
+              <b>담당자</b>
+              <BasicButton @click="openModal4" text="조직도" width="110px" style="margin-left: 10px;" />
+            </span>
+            <div style="grid-column: 1 / 3">
+              <div
+                style="display: grid; grid-template-columns: repeat(3, calc(100% / 3)); gap: 10px;margin: auto;margin-top: -29px;">
+                <BasicInput id="부서" style="margin-top: 31px" />
+                <BasicInput id="담당자2" style="margin-top:31px" />
+                <BasicInput id="부서2" style="margin-top: 31px;" />
+                <BasicInput id="부서2" style="margin-top: 31px;" />
+                <BasicInput id="부서2" style="margin-top: 31px;" />
+                <BasicInput id="부서2" style="margin-top: 31px;" />
+              </div>
+            </div>
             <div class="modal-form-select" style="grid-column: 1 / 3">
               <span><b>비고</b></span>
               <textarea name="note" id="note2" rows="5" placeholder="이상없음" class="basic-textarea"
@@ -78,7 +89,10 @@
 
         </template>
         <template #footer>
-          <BasicButton text="확인" width="80px" />
+          <div class="btn-group-2" style="width: 160px;margin: 0 auto;">
+            <BasicButton @click="closeModal1" text="취소" width="80px" />
+            <BasicButton @click="" text="저장" width="80px" />
+          </div>
         </template>
       </Modal>
     </Teleport>
@@ -106,10 +120,21 @@
               <BasicInput id="업무코드" label="업무코드*" />
             </div>
 
-            <BasicInput id="담당자" label="담당자" />
-            <BasicInput id="부서" style="margin-top: 31px;" />
-            <BasicInput id="담당자2" style="margin-top: -14px;" />
-            <BasicInput id="부서2" style="margin-top: -14px;" />
+            <span style="display: inline-flex; align-items: center;">
+              <b>담당자</b>
+              <BasicButton @click="openModal4" text="조직도" width="110px" style="margin-left: 10px;" />
+            </span>
+            <div style="grid-column: 1 / 3">
+              <div
+                style="display: grid; grid-template-columns: repeat(3, calc(100% / 3)); gap: 10px;margin: auto;margin-top: -29px;">
+                <BasicInput id="부서" style="margin-top: 31px" />
+                <BasicInput id="담당자2" style="margin-top:31px" />
+                <BasicInput id="부서2" style="margin-top: 31px;" />
+                <BasicInput id="부서2" style="margin-top: 31px;" />
+                <BasicInput id="부서2" style="margin-top: 31px;" />
+                <BasicInput id="부서2" style="margin-top: 31px;" />
+              </div>
+            </div>
 
             <div class="modal-form-select" style="grid-column: 1 / 3">
               <span><b>비고</b></span>
@@ -120,7 +145,10 @@
 
         </template>
         <template #footer>
-          <BasicButton text="확인" width="80px" />
+          <div class="btn-group-2" style="width: 160px;margin: 0 auto;">
+            <BasicButton @click="closeModal2" text="취소" width="80px" />
+            <BasicButton @click="" text="저장" width="80px" />
+          </div>
         </template>
       </Modal>
     </Teleport>
@@ -167,8 +195,147 @@
       </Modal>
     </Teleport>
   </div>
+  <!-- 조직조회 -->
+  <div>
+    <Teleport to="body">
+      <Modal v-if="isModalOpen4" @close="closeModal4">
+        <template #body>
+          <div class="organization-modal">
+            <div style="width: 225px">
+              <div class="flex-btn-box">
+                <img :src="require(`@/assets/icons/structure.svg`)" alt="조직" width="20px">
+                <span>조직</span>
+              </div>
+              <div class="scrollable-area">
+                <DataTree :nodes="treeData" />
+              </div>
+            </div>
+            <div style="width: 460px">
+              <div class="flex-box-center" style="margin-bottom: 24px">
+                <button class="primary-btn">이름/사번</button>
+                <button class="light-btn small-btn" style="width:80px">부서</button>
+
+                <div class="search-input-btn">
+                  <input type="text" placeholder="검색어 입력">
+                  <button class="light-btn small-btn" type="button">검색</button>
+                </div>
+              </div>
+
+              <div class="scrollable-area" style="max-height: 195px">
+                <BasicTable :columns="orgColumns" :rows="orgRows" enable-row-check />
+              </div>
+              <div class="btn-group-2" style="width: 170px; margin: 18px auto;">
+                <BasicButton class="small-btn" text="취소" button-style="cancel-btn" />
+                <BasicButton class="small-btn" text="선택" />
+              </div>
+              <hr>
+              <span class="selected-users"> • 선택된 사용자</span>
+              <div class="scrollable-area" style="max-height: 150px; margin-top: 4px">
+                <BasicTable :columns="orgColumns2" :rows="orgRows" />
+              </div>
+            </div>
+          </div>
+        </template>
+        <template #footer>
+          <div class="btn-group-2" style="width: 200px; margin: 0 auto;">
+            <BasicButton text="취소" button-style="cancel-btn" width="94px" />
+            <BasicButton text="확인" width="94px" />
+          </div>
+        </template>
+      </Modal>
+    </Teleport>
+  </div>
+
+
+
+
+
 
 </template>
+
+<script setup>
+import { ref } from 'vue'
+
+const orgColumns = [
+  { label: '이름', field: 'name', sortable: false },
+  { label: '아이디', field: 'id', sortable: false },
+  { label: '부서명', field: 'department', sortable: false },
+  { label: '팀명', field: 'team', sortable: false }
+]
+const orgColumns2 = [{ label: '', field: 'delete', type: 'delete', sortable: false }, ...orgColumns]
+const orgRows = [
+  { name: "test", id: "test", department: "test", team: "test" },
+  { name: "test", id: "test", department: "test", team: "test" },
+  { name: "test", id: "test", department: "test", team: "test" },
+  { name: "test", id: "test", department: "test", team: "test" },
+  { name: "test", id: "test", department: "test", team: "test" },
+  { name: "test", id: "test", department: "test", team: "test" },
+  { name: "test", id: "test", department: "test", team: "test" },
+  { name: "test", id: "test", department: "test", team: "test" },
+  { name: "test", id: "test", department: "test", team: "test" },
+  { name: "test", id: "test", department: "test", team: "test" },
+]
+
+
+const treeData = ref([
+  {
+    label: 'GIB2그룹',
+    children: [
+      { label: 'test' },
+      { label: 'test' },
+      { label: 'test' },
+      { label: 'test' },
+      { label: 'test' },
+      { label: 'test' },
+      { label: 'test' },
+      { label: 'test' },
+    ]
+  },
+  {
+    label: 'ICT그룹',
+    children: [
+      { label: 'ICT기획부' },
+      { label: '금융시스템부' },
+      { label: '금융시스템부' },
+      {
+        label: 'ICT그룹2',
+        children: [
+          { label: '정보시스템부' },
+          { label: '정보시스템부' },
+          { label: '정보시스템부' },
+          {
+            label: '정보시스템부', children: [
+              { label: '1팀' },
+              { label: '2팀' },
+            ]
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: '리스크관리그룹',
+    children: [
+      { label: 'test' },
+    ]
+  },
+  {
+    label: '홀세일그룹',
+    children: [
+      { label: 'test' },
+    ]
+  },
+  {
+    label: '감사',
+    children: [
+      { label: 'test' },
+    ]
+  },
+],
+)
+
+</script>
+
 
 <script>
 import SubHeader from "@/components/layout/SubHeader";
@@ -180,6 +347,7 @@ import BasicButton from "@/components/common/BasicButton";
 import DatePicker from "@/components/common/DatePicker";
 import Modal from "@/components/common/Modal";
 import { ref } from "vue";
+import DataTree from "@/components/common/DataTree"
 import axios from 'axios';
 
 let selectedSystem = ref("계정계");
@@ -194,7 +362,8 @@ export default {
     BasicInput,
     BasicButton,
     DatePicker,
-    Modal
+    Modal,
+    DataTree
   },
   setup() {
     return {
@@ -206,6 +375,7 @@ export default {
       isModalOpen1: false, // 모달 상태 변수
       isModalOpen2: false, // 모달 상태 변수
       isModalOpen3: false, // 모달 상태 변수
+      isModalOpen4: false, // 모달 상태 변수
       columns: [
         {
           label: 'NO', field: 'repoManagerIdx', sortable: false,
@@ -490,6 +660,14 @@ export default {
     },
     closeModal3() {
       this.isModalOpen3 = false; // 모달 닫기
+    },
+    openModal4() {
+      this.closeModal3()
+      console.log('isModalOpen2 ::: ')
+      this.isModalOpen4 = true; // 모달 열기
+    },
+    closeModal4() {
+      this.isModalOpen4 = false; // 모달 닫기
     },
   },
   mounted() {

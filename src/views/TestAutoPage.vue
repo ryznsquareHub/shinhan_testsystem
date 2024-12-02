@@ -86,7 +86,12 @@
             </div>
 
             <div class="modal-form-select" style="grid-column: 1 / 3">
-              <span><b>파일첨부</b></span>
+              
+              <span style="display: inline-flex; align-items: center;">
+                <b>파일첨부</b>
+                <BasicButton text="파일첨부" width="110px" style="margin-left: 10px;" />
+              </span>
+
               <div class="form-file-list">
                 <div class="flex-box-center">
                   <img :src="require(`@/assets/icons/attachment.svg`)" alt="file" width="9px">
@@ -107,8 +112,8 @@
         </template>
         <template #footer>
           <div class="btn-group-2" style="width: 160px;margin: 0 auto;">
-            <BasicButton text="취소" button-style="cancel-btn" width="80px" />
-            <BasicButton text="저장" width="80px" />
+            <BasicButton @click="closeModal1" text="취소" button-style="cancel-btn" width="80px" />
+            <BasicButton @click="" text="저장" width="80px" />
           </div>
         </template>
       </Modal>
@@ -149,7 +154,12 @@
             </div>
 
             <div class="modal-form-select" style="grid-column: 1 / 3">
-              <span><b>파일첨부</b></span>
+
+              <span style="display: inline-flex; align-items: center;">
+                <b>파일첨부</b>
+                <BasicButton @click="" text="파일첨부" width="110px" style="margin-left: 10px;" />
+              </span>
+
               <div class="form-file-list">
                 <div class="flex-box-center">
                   <img :src="require(`@/assets/icons/attachment.svg`)" alt="file" width="9px">
